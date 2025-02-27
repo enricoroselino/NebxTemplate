@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Shared.Models.Exceptions;
+using Shared.Models.ValueObjects;
 
 namespace Shared.Models.Responses;
 

@@ -1,6 +1,6 @@
 ﻿using Shared.Models.Exceptions;
 
-namespace Shared.Models;
+namespace Shared.Models.ValueObjects;
 
 public record GeoCoordinate
 {

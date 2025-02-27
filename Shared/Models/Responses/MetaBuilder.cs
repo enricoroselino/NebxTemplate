@@ -1,3 +1,5 @@
+using Shared.Models.ValueObjects;
+
 namespace Shared.Models.Responses;
 
 public class MetaBuilder
