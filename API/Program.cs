@@ -1,9 +1,9 @@
 using BuildingBlocks.API.Configurations;
+using BuildingBlocks.API.Configurations.Scalar;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-
+builder.Services.AddScalarSetup();
 builder.Services.AddLoggerSetup();
 builder.Services.AddJsonSetup();
 builder.Services.AddIdempotentSetup();
@@ -14,6 +14,7 @@ var app = builder.Build();
 if (!app.Environment.IsProduction())
 {
     app.MapOpenApi();
+    app.UseScalarSetup();
 }
 
 app.UseAuthentication();
