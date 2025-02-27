@@ -2,11 +2,11 @@
 using Serilog.Events;
 using Serilog.Filters;
 
-namespace Shared.Configurations;
+namespace Shared.Configuration;
 
 public static class Logger
 {
-    public static void Create(Action<LoggerConfiguration>? configure = null)
+    public static void Create(Action<LoggerConfiguration>? configurationBuilder = null)
     {
         var loggerConfiguration = new LoggerConfiguration();
 
@@ -20,7 +20,7 @@ public static class Logger
 
         loggerConfiguration.WriteTo.Console();
         
-        configure?.Invoke(loggerConfiguration);
+        configurationBuilder?.Invoke(loggerConfiguration);
         Log.Logger = loggerConfiguration.CreateLogger();
     }
 }
