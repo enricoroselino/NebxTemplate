@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDefaultSetup();
 builder.Services.AddLoggerSetup();
+
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
 
 var app = builder.Build();

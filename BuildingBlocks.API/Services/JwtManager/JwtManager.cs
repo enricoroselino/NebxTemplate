@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Guid = System.Guid;
 
-namespace BuildingBlocks.Contract.Infrastructure.JwtManager;
+namespace BuildingBlocks.API.Services.JwtManager;
 
 public sealed class JwtManager : IJwtManager
 {

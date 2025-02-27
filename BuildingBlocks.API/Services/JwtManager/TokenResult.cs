@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Contract.Infrastructure.JwtManager;
+﻿namespace BuildingBlocks.API.Services.JwtManager;
 
 public class TokenResult
 {

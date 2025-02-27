@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BuildingBlocks.Contract.Infrastructure.JwtManager;
+namespace BuildingBlocks.API.Services.JwtManager;
 
 public class JwtManagerOptions
 {

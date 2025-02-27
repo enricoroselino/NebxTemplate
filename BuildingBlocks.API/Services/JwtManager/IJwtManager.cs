@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BuildingBlocks.Contract.Infrastructure.JwtManager;
+namespace BuildingBlocks.API.Services.JwtManager;
 
 public interface IJwtManager
 {
