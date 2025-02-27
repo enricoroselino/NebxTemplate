@@ -8,6 +8,13 @@
 
     <ItemGroup>
       <PackageReference Include="Serilog.AspNetCore" />
+      <PackageReference Include="Serilog.Enrichers.AspNetCore.HttpContext" />
+      <PackageReference Include="Serilog.Enrichers.CorrelationId" />
+      <PackageReference Include="Serilog.Enrichers.Environment" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared.Configurations\Shared.Configurations.csproj" />
     </ItemGroup>
 
 </Project>
