@@ -2,7 +2,7 @@
 using Serilog.Events;
 using Serilog.Filters;
 
-namespace Shared.Configuration;
+namespace Shared.Configurations;
 
 public static class Logger
 {

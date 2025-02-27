@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{E0B3B6A5-C5D5-4E55-9491-434BFC75BC44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Configuration", "Shared.Configuration\Shared.Configuration.csproj", "{7F27A2AA-402B-4F45-A06A-1C0597E678F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Configurations", "Shared.Configurations\Shared.Configurations.csproj", "{7F27A2AA-402B-4F45-A06A-1C0597E678F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
