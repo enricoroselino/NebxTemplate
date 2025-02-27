@@ -2,7 +2,7 @@
 
 namespace Shared.Models.Responses;
 
-public abstract class ErrorResponse
+public abstract class ErrorBase
 {
     [JsonPropertyOrder(1)] public int StatusCode { get; protected set; }
     [JsonPropertyOrder(2)] public string Message { get; protected set; } = string.Empty;
