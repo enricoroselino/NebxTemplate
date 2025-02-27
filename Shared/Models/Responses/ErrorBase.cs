@@ -4,6 +4,10 @@ namespace Shared.Models.Responses;
 
 public class ErrorBase
 {
+    protected ErrorBase()
+    {
+    }
+
     [JsonPropertyOrder(1)] public int StatusCode { get; protected set; }
     [JsonPropertyOrder(2)] public string Message { get; protected set; } = string.Empty;
     [JsonPropertyOrder(3)] public string RequestId { get; protected set; } = string.Empty;
