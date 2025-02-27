@@ -4,9 +4,19 @@ using Serilog.Filters;
 
 namespace Shared.Configurations;
 
+/// <summary>
+/// Provides a helper class to create and configure an ILogger instance.
+/// </summary>
 public static class Logger
 {
-    public static void Create(Action<LoggerConfiguration>? configurationBuilder = null)
+    /// <summary>
+    /// Creates and configures a Serilog ILogger instance.
+    /// </summary>
+    /// <param name="configurationBuilder">
+    /// An optional action to customize the logger configuration.
+    /// </param>
+    /// <returns>An instance of ILogger with the specified configuration.</returns>
+    public static ILogger Create(Action<LoggerConfiguration>? configurationBuilder = null)
     {
         var loggerConfiguration = new LoggerConfiguration();
 
@@ -21,6 +31,6 @@ public static class Logger
         loggerConfiguration.WriteTo.Console();
         
         configurationBuilder?.Invoke(loggerConfiguration);
-        Log.Logger = loggerConfiguration.CreateLogger();
+        return Log.Logger = loggerConfiguration.CreateLogger();
     }
 }
