@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddLoggerSetup();
+builder.Services.AddIdempotentSetup();
 
 var app = builder.Build();
 

@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="IdempotentAPI" />
+      <PackageReference Include="IdempotentAPI.Cache.DistributedCache" />
       <PackageReference Include="MediatR" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" />
