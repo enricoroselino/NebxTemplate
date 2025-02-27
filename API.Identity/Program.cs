@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDefaultSetup();
 builder.Services.AddLoggerSetup();
+builder.Services.AddJwtAuthenticationSetup();
 
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
 

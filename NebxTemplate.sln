@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{DA005C57-E739-4305-AB2E-8DE157EA3BB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Identity", "API.Identity\API.Identity.csproj", "{DA005C57-E739-4305-AB2E-8DE157EA3BB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.API", "BuildingBlocks.API\BuildingBlocks.API.csproj", "{4876323B-1DC0-43E8-9597-B78B53E61C17}"
 EndProject
