@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
 
-namespace BuildingBlocks.API.Configurations.Scalar;
+namespace BuildingBlocks.API.Configurations.ApiDocumentation;
 
 public static class ScalarSetup
 {
     public static void AddScalarSetup(this IServiceCollection services)
     {
-        services.AddOpenApi(options => { options.AddDocumentTransformer<SecurityTransformer>(); });
+        services.AddOpenApi(options => { options.AddDocumentTransformer<OpenApiSecurityTransformer>(); });
     }
 
     public static void UseScalarSetup(this WebApplication app)
@@ -20,7 +21,7 @@ public static class ScalarSetup
             options.DefaultHttpClient = client;
             options.Authentication = new ScalarAuthenticationOptions
             {
-                PreferredSecurityScheme = "Bearer"
+                PreferredSecurityScheme = JwtBearerDefaults.AuthenticationScheme
             };
 
             options.DarkMode = true;

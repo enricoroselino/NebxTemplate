@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.API.Configurations;
-using BuildingBlocks.API.Configurations.Scalar;
+using BuildingBlocks.API.Configurations.ApiDocumentation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.API;

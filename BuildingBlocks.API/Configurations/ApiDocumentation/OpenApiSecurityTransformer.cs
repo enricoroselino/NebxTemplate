@@ -1,28 +1,32 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
-namespace BuildingBlocks.API.Configurations.Scalar;
+namespace BuildingBlocks.API.Configurations.ApiDocumentation;
 
-public sealed  class SecurityTransformer : IOpenApiDocumentTransformer
+public sealed class OpenApiSecurityTransformer : IOpenApiDocumentTransformer
 {
     private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
-    
-    public SecurityTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider)
+
+    public OpenApiSecurityTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider)
     {
         _authenticationSchemeProvider = authenticationSchemeProvider;
     }
-    
-    public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+
+    public async Task TransformAsync(
+        OpenApiDocument document,
+        OpenApiDocumentTransformerContext context,
+        CancellationToken cancellationToken)
     {
         var authenticationSchemes = await _authenticationSchemeProvider.GetAllSchemesAsync();
 
-        if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+        if (authenticationSchemes.Any(authScheme => authScheme.Name == JwtBearerDefaults.AuthenticationScheme))
         {
             // Add the security scheme at the document level
             var requirements = new Dictionary<string, OpenApiSecurityScheme>
             {
-                ["Bearer"] = new()
+                [JwtBearerDefaults.AuthenticationScheme] = new()
                 {
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer", // "bearer" refers to the header name here
@@ -36,10 +40,14 @@ public sealed  class SecurityTransformer : IOpenApiDocumentTransformer
             // Apply it as a requirement for all operations
             foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
             {
-                operation.Value.Security.Add(new OpenApiSecurityRequirement
+                var reference = new OpenApiReference
                 {
-                    [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "Bearer", Type = ReferenceType.SecurityScheme } }] = Array.Empty<string>()
-                });
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                };
+
+                var scheme = new OpenApiSecurityScheme { Reference = reference };
+                operation.Value.Security.Add(new OpenApiSecurityRequirement { [scheme] = Array.Empty<string>() });
             }
         }
     }

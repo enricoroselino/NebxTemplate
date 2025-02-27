@@ -1,7 +1,7 @@
 using BuildingBlocks.API;
 using BuildingBlocks.API.Configurations;
+using BuildingBlocks.API.Configurations.ApiDocumentation;
 using BuildingBlocks.API.Configurations.Endpoint;
-using BuildingBlocks.API.Configurations.Scalar;
 
 var builder = WebApplication.CreateBuilder(args);
 
