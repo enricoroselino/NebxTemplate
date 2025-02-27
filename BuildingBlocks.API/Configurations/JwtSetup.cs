@@ -1,10 +1,8 @@
 ﻿using System.Text;
-using Ardalis.GuardClauses;
 using BuildingBlocks.API.Extensions;
 using BuildingBlocks.Contract.Infrastructure.JwtManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
