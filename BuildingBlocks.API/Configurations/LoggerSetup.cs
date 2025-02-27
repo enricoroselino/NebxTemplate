@@ -6,7 +6,7 @@ using Serilog.Events;
 using Serilog.Filters;
 using Shared.Configurations;
 
-namespace BuildingBlocks.API;
+namespace BuildingBlocks.API.Configurations;
 
 /// <summary>
 /// Provides an extension method to configure and add Serilog logging to the application.

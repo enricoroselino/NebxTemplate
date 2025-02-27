@@ -1,4 +1,4 @@
-using BuildingBlocks.API;
+using BuildingBlocks.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
