@@ -9,7 +9,7 @@ namespace BuildingBlocks.API.Configurations.Endpoint;
 
 public static class EndpointSetup
 {
-    public static void AddEndpointSetup(this IServiceCollection services, Assembly assembly)
+    internal static void AddEndpointSetup(this IServiceCollection services, Assembly assembly)
     {
         var types = AssembliesHelper.GetInterfaceTypes<IEndpoint>(assembly);
         var descriptors = types.Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type));

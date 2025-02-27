@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.API.Configurations.Mediator;
 
-public static class MediatorSetup
+internal static class MediatorSetup
 {
     public static void AddMediatorSetup(this IServiceCollection services, Assembly assembly)
     {
