@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Shared.Models.Interfaces;
 
-namespace BuildingBlocks.API.Configurations.Databases;
+namespace BuildingBlocks.API.Configurations.EFCore;
 
 internal sealed class TimeAuditInterceptor : SaveChangesInterceptor
 {

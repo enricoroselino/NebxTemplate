@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BuildingBlocks.API.Configurations.Databases;
+namespace BuildingBlocks.API.Configurations.EFCore;
 
 internal static class EntityExtensions
 {

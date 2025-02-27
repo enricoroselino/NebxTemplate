@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BuildingBlocks.API.Configurations.Databases;
+namespace BuildingBlocks.API.Configurations.EFCore;
 
 internal sealed class DispatchDomainEventsInterceptor : SaveChangesInterceptor
 {
