@@ -18,6 +18,7 @@
       <PackageReference Include="Serilog.AspNetCore" />
       <PackageReference Include="Serilog.Enrichers.CorrelationId" />
       <PackageReference Include="Serilog.Enrichers.Environment" />
+      <PackageReference Include="Swashbuckle.AspNetCore" />
       <PackageReference Include="System.Text.Encodings.Web" />
     </ItemGroup>
 
