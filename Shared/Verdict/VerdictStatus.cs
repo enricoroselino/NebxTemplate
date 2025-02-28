@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.API.Verdict;
+﻿namespace Shared.Verdict;
 
 public enum VerdictStatus
 {

@@ -1,6 +1,6 @@
-﻿using BuildingBlocks.API.Verdict;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Shared.Models.Exceptions;
+using Shared.Verdict;
 
 namespace BuildingBlocks.API.Extensions;
 
@@ -12,7 +12,7 @@ public static class VerdictExtensions
     {
         return verdict.Status switch
         {
-            VerdictStatus.Ok => verdict is Verdict.Verdict ? Results.Ok() : Results.Ok(verdict.GetValue()),
+            VerdictStatus.Ok => verdict is Verdict ? Results.Ok() : Results.Ok(verdict.GetValue()),
             VerdictStatus.NoContent => Results.NoContent(),
             VerdictStatus.Created => Results.Created("", verdict.GetValue()),
             VerdictStatus.NotFound => NotFound(verdict, context),

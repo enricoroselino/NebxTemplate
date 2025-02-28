@@ -1,6 +1,6 @@
 ﻿using Shared.Models.Exceptions;
 
-namespace BuildingBlocks.API.Verdict;
+namespace Shared.Verdict;
 
 public class Verdict<T> : IVerdict
 {
