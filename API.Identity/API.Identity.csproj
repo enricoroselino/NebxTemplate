@@ -4,6 +4,9 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
     </PropertyGroup>
 
     <ItemGroup>
