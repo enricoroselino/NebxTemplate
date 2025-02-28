@@ -25,7 +25,7 @@ public static class ScalarSetup
             };
 
             options.DarkMode = true;
-            options.HideModels = false;
+            options.HideModels = true;
             options.Layout = ScalarLayout.Modern;
             options.ShowSidebar = true;
         });
