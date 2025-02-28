@@ -13,10 +13,11 @@ public static class DefaultSetup
         services.AddScalarSetup();
         services.AddSwaggerSetup();
         services.AddJsonSetup();
+        services.AddRateLimiterSetup();
 
         services.AddCors();
         services.AddAntiforgery();
-        
+
         services.AddSingleton<TimeProvider>(_ => TimeProvider.System);
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
