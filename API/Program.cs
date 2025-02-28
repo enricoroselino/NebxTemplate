@@ -1,6 +1,7 @@
 using BuildingBlocks.API;
 using BuildingBlocks.API.Configurations;
 using BuildingBlocks.API.Configurations.Endpoint;
+using Modules.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment.EnvironmentName;
@@ -14,7 +15,9 @@ builder.Configuration
 builder.Services.AddDefaultSetup();
 builder.Services.AddLoggerSetup();
 builder.Services.AddJwtAuthenticationSetup();
+
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
+builder.Services.AddIdentityModule();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
