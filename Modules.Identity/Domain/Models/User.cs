@@ -3,6 +3,8 @@ using BuildingBlocks.API.Models.DDD;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models.Exceptions;
 
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+
 namespace Modules.Identity.Domain.Models;
 
 public class User : IdentityUser<Guid>, IEntity<Guid>
@@ -21,10 +23,10 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual ICollection<UserRole> UserRoles { get; private set; }
-    public virtual ICollection<UserClaim> UserClaims { get; private set; }
-    public virtual ICollection<UserLogin> UserLogins { get; private set; }
-    public virtual ICollection<UserToken> UserTokens { get; private set; }
+    public virtual ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
+    public virtual ICollection<UserClaim> UserClaims { get; private set; } = new List<UserClaim>();
+    public virtual ICollection<UserLogin> UserLogins { get; private set; } = new List<UserLogin>();
+    public virtual ICollection<UserToken> UserTokens { get; private set; } = new List<UserToken>();
 
     public static User Create(string username, string email, string fullname, int? compatId = null)
     {

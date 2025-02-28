@@ -2,6 +2,7 @@
 using BuildingBlocks.API.Models.DDD;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models.Exceptions;
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
 
 namespace Modules.Identity.Domain.Models;
 
@@ -17,8 +18,8 @@ public class Role : IdentityRole<Guid>, IEntity<Guid>
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual ICollection<RoleClaim> RoleClaims { get; private set; }
-    public virtual ICollection<UserRole> UserRoles { get; private set; }
+    public virtual ICollection<RoleClaim> RoleClaims { get; private set; } = new List<RoleClaim>();
+    public virtual ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
 
     public static Role Create(string name, string description)
     {

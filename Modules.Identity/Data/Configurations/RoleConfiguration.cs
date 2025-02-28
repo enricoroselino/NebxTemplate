@@ -13,6 +13,9 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasIndex(x => x.CreatedOn)
             .IsClustered();
+        
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Description)
             .HasMaxLength(150)
