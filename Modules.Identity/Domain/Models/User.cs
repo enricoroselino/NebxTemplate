@@ -2,7 +2,6 @@
 using BuildingBlocks.API.Models.DDD;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models.Exceptions;
-using Shared.Models.Interfaces;
 
 namespace Modules.Identity.Domain.Models;
 
@@ -12,18 +11,16 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     {
     }
 
-    public int? CompatId { get; private set; }
     public override string UserName { get; set; } = string.Empty;
     public string FullName { get; private set; } = string.Empty;
     public override string NormalizedUserName { get; set; } = string.Empty;
     public override string Email { get; set; } = string.Empty;
     public override string NormalizedEmail { get; set; } = string.Empty;
     public override string PasswordHash { get; set; } = string.Empty;
-    public override string SecurityStamp { get; set; } = string.Empty;
-    public override string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
+    public int? CompatId { get; private set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
-    
+
     public virtual ICollection<UserRole> UserRoles { get; private set; }
     public virtual ICollection<UserClaim> UserClaims { get; private set; }
     public virtual ICollection<UserLogin> UserLogins { get; private set; }
@@ -33,6 +30,7 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     {
         return new User()
         {
+            Id = Guid.NewGuid(),
             UserName = Guard.Against.NullOrWhiteSpace(username,
                 exceptionCreator: () => new DomainException("Username can't be empty.")),
             Email = Guard.Against.NullOrWhiteSpace(email,
