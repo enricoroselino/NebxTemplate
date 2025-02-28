@@ -6,7 +6,7 @@ namespace BuildingBlocks.API.Extensions;
 
 public static class FormFileExtension
 {
-    public static IRuleBuilderOptions<T, IFormFile> BaseFileValidation<T>(
+    public static IRuleBuilderOptions<T, IFormFile> DefaultValidation<T>(
         this IRuleBuilder<T, IFormFile> ruleBuilder,
         int maxNameLength = 150,
         params string[] allowedExtensions)
