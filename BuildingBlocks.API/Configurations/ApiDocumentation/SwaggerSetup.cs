@@ -7,7 +7,7 @@ using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 namespace BuildingBlocks.API.Configurations.ApiDocumentation;
 
-public static class SwaggerSetup
+internal static class SwaggerSetup
 {
     public static void AddSwaggerSetup(this IServiceCollection services)
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.API.Configurations;
 
-public static class RateLimiterSetup
+internal static class RateLimiterSetup
 {
     public static void AddRateLimiterSetup(this IServiceCollection services)
     {

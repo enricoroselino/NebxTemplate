@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.API.Configurations;
 
-public static class JsonSetup
+internal static class JsonSetup
 {
     public static void AddJsonSetup(this IServiceCollection services)
     {

@@ -7,7 +7,7 @@ using Shared.Models.Exceptions;
 
 namespace BuildingBlocks.API;
 
-public class GlobalExceptionHandler : IExceptionHandler
+internal class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger;
 

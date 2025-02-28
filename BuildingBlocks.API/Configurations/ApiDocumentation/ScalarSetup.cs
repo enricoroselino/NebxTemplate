@@ -5,7 +5,7 @@ using Scalar.AspNetCore;
 
 namespace BuildingBlocks.API.Configurations.ApiDocumentation;
 
-public static class ScalarSetup
+internal static class ScalarSetup
 {
     public static void AddScalarSetup(this IServiceCollection services)
     {
