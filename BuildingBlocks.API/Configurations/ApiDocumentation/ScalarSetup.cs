@@ -16,6 +16,7 @@ public static class ScalarSetup
     {
         var client = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.CSharp, ScalarClient.RestSharp);
 
+        app.MapOpenApi();
         app.MapScalarApiReference(options =>
         {
             options.DefaultHttpClient = client;

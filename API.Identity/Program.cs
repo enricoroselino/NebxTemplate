@@ -15,15 +15,15 @@ builder.Services.AddJwtAuthenticationSetup();
 
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // based on browser timeout
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(30);
+});
+
 var app = builder.Build();
 
-if (!app.Environment.IsProduction())
-{
-    app.MapOpenApi();
-    app.UseScalarSetup();
-}
-
-app.UseExceptionHandler(_ => { });
+app.UseDefaultSetup();
 
 app.UseAuthentication();
 app.UseAuthorization();
