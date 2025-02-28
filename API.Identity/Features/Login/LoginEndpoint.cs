@@ -11,7 +11,7 @@ public class LoginEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/login", async (ISender mediator, CancellationToken ct) =>
+        app.MapPost("/dummy/login", async (ISender mediator, CancellationToken ct) =>
             {
                 var command = new LoginCommand();
                 var response = await mediator.Send(command, ct);

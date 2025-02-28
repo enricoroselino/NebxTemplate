@@ -7,7 +7,7 @@ public class GreetingEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/greeting", async (ISender mediator, CancellationToken ct) =>
+        app.MapGet("/dummy/greeting", async (ISender mediator, CancellationToken ct) =>
             {
                 var query = new GreetingQuery();
                 var response = await mediator.Send(query, ct);
