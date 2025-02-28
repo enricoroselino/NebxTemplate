@@ -3,4 +3,4 @@ using Shared.Models.Responses;
 
 namespace API.Features.Login;
 
-public record LoginCommand() : ICommand<Response<LoginResponse>>;
+public record DummyLoginCommand() : ICommand<Response<DummyLoginResponse>>;

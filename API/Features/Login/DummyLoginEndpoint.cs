@@ -5,7 +5,7 @@ using Shared.Models.Exceptions;
 
 namespace API.Features.Login;
 
-public class LoginEndpoint : IEndpoint
+public class DummyLoginEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -14,11 +14,11 @@ public class LoginEndpoint : IEndpoint
                 var environment = serviceProvider.GetRequiredService<IWebHostEnvironment>();
                 if (environment.IsProduction()) throw new DomainException("currently in production environment");
 
-                var command = new LoginCommand();
+                var command = new DummyLoginCommand();
                 var response = await mediator.Send(command, ct);
                 return response.ToResult();
             })
-            .WithName(nameof(LoginEndpoint))
+            .WithName(nameof(DummyLoginEndpoint))
             .WithTags("Dummy Endpoints");
     }
 }

@@ -6,16 +6,16 @@ using Shared.Models.Responses;
 
 namespace API.Features.Login;
 
-public class LoginCommandHandler : ICommandHandler<LoginCommand, Response<LoginResponse>>
+public class DummyLoginCommandHandler : ICommandHandler<DummyLoginCommand, Response<DummyLoginResponse>>
 {
     private readonly IJwtManager _jwtManager;
     
-    public LoginCommandHandler(IJwtManager jwtManager)
+    public DummyLoginCommandHandler(IJwtManager jwtManager)
     {
         _jwtManager = jwtManager;
     }
     
-    public Task<Response<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public Task<Response<DummyLoginResponse>> Handle(DummyLoginCommand request, CancellationToken cancellationToken)
     {
         var claims = new List<Claim>()
         {
@@ -28,7 +28,7 @@ public class LoginCommandHandler : ICommandHandler<LoginCommand, Response<LoginR
         var accessToken = _jwtManager.CreateAccessToken(claims);
         var refreshToken = _jwtManager.CreateRefreshToken();
 
-        var responseDto = new LoginResponse(accessToken, refreshToken);
+        var responseDto = new DummyLoginResponse(accessToken, refreshToken);
         return Task.FromResult(Response.Build(responseDto));
     }
 }
