@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Shared.Configurations.Helper;
+namespace Shared.Helper;
 
 /// <summary>
 /// Helper class for retrieving types that implement a specified interface from given assemblies.

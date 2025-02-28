@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Shared.Configurations.Helper;
+using Shared.Helper;
 
 namespace BuildingBlocks.API.Configurations.Endpoint;
 
