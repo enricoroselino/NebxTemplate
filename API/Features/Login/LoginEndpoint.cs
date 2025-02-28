@@ -3,7 +3,7 @@ using BuildingBlocks.API.Extensions;
 using MediatR;
 using Shared.Models.Exceptions;
 
-namespace API.Identity.Features.Login;
+namespace API.Features.Login;
 
 public class LoginEndpoint : IEndpoint
 {

@@ -2,7 +2,7 @@
 using BuildingBlocks.API.Extensions;
 using MediatR;
 
-namespace API.Identity.Features.Greeting;
+namespace API.Features.Greeting;
 
 public class GreetingEndpoint : IEndpoint
 {

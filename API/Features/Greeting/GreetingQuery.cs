@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.API.Models.CQRS;
 using Shared.Models.Responses;
 
-namespace API.Identity.Features.Greeting;
+namespace API.Features.Greeting;
 
 public record GreetingQuery : IQuery<Response<string>>;
