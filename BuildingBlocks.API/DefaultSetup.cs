@@ -32,6 +32,5 @@ public static class DefaultSetup
         }
 
         app.UseExceptionHandler(_ => { });
-        app.UseStaticFiles();
     }
 }
