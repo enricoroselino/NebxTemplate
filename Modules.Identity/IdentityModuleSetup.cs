@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.API.Configurations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Modules.Identity.Data;
@@ -13,7 +14,13 @@ public static class IdentityModuleSetup
     public static void AddIdentityModule(this IServiceCollection services)
     {
         services.AddModuleSetup(typeof(IdentityModuleSetup).Assembly);
-        
+
+        services.AddDbContext<AppIdentityDbContext>((provider, builder) =>
+        {
+            var interceptors = provider.GetServices<ISaveChangesInterceptor>();
+            builder.AddInterceptors(interceptors);
+        });
+
         services.AddIdentityCore<User>(options =>
             {
                 options.Password.RequiredLength = 8;

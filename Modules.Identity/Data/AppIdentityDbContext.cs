@@ -33,13 +33,5 @@ public class AppIdentityDbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(Schema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppIdentityDbContext).Assembly);
-
-        modelBuilder.Entity<User>(entity => entity.ToTable("Users"));
-        modelBuilder.Entity<Role>(entity => entity.ToTable("Roles"));
-        modelBuilder.Entity<UserRole>(entity => entity.ToTable("UserRoles"));
-        modelBuilder.Entity<UserClaim>(entity => entity.ToTable("UserClaims"));
-        modelBuilder.Entity<RoleClaim>(entity => entity.ToTable("RoleClaims"));
-        modelBuilder.Entity<UserLogin>(entity => entity.ToTable("UserLogins"));
-        modelBuilder.Entity<UserToken>(entity => entity.ToTable("UserTokens"));
     }
 }
