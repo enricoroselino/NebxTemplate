@@ -39,7 +39,8 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
             NormalizedUserName = email.ToUpperInvariant(),
             FullName = Guard.Against.NullOrWhiteSpace(fullname,
                 exceptionCreator: () => new DomainException("Fullname can't be empty.")),
-            CompatId = compatId
+            CompatId = compatId,
+            IsActive = true,
         };
     }
 
