@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Modules.Identity.Data;
 using Modules.Identity.Domain.Models;
+using Modules.Identity.Infrastructure;
 
 namespace Modules.Identity;
 
@@ -14,13 +15,15 @@ public static class IdentityModuleSetup
     public static void AddIdentityModule(this IServiceCollection services)
     {
         services.AddModuleSetup(typeof(IdentityModuleSetup).Assembly);
+        
+        services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
 
         services.AddDbContext<AppIdentityDbContext>((provider, builder) =>
         {
             var interceptors = provider.GetServices<ISaveChangesInterceptor>();
             builder.AddInterceptors(interceptors);
         });
-
+        
         services.AddIdentityCore<User>(options =>
             {
                 options.Password.RequiredLength = 8;
