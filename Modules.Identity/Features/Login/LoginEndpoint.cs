@@ -26,6 +26,7 @@ public class LoginEndpoint : IEndpoint
                 return result.ToResult(httpContext);
             })
             .WithName(nameof(LoginEndpoint))
-            .WithSummary("Login to get JWT");
+            .WithSummary("Login to get JWT")
+            .WithTags(ApiMeta.Authentication.Tag);
     }
 }
