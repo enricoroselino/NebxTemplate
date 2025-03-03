@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Modules.Identity.Constants;
 
 namespace Modules.Identity.Features.Register;
 
@@ -12,7 +13,9 @@ public class RegisterEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/identity/register", async (
+        var group = app.MapGroup(ApiMeta.Authentication.Route);
+        
+        group.MapPost("register", async (
                 ISender mediator,
                 HttpContext httpContext,
                 CancellationToken ct,
@@ -28,6 +31,8 @@ public class RegisterEndpoint : IEndpoint
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
-            .WithTags("Identity");
+            .WithName(nameof(RegisterEndpoint))
+            .WithSummary("Register a new user")
+            .WithTags(ApiMeta.Authentication.Tag);
     }
 }
