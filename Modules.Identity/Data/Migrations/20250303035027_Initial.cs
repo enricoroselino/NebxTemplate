@@ -29,7 +29,8 @@ namespace Modules.Identity.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,7 +60,8 @@ namespace Modules.Identity.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,13 +203,6 @@ namespace Modules.Identity.Data.Migrations
                 .Annotation("SqlServer:Clustered", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_Id",
-                schema: "Identity",
-                table: "Roles",
-                column: "Id")
-                .Annotation("SqlServer:Clustered", false);
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 schema: "Identity",
                 table: "Roles",
@@ -244,13 +239,6 @@ namespace Modules.Identity.Data.Migrations
                 table: "Users",
                 column: "CreatedOn")
                 .Annotation("SqlServer:Clustered", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Id",
-                schema: "Identity",
-                table: "Users",
-                column: "Id")
-                .Annotation("SqlServer:Clustered", false);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

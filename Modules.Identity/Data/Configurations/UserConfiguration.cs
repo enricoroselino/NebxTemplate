@@ -10,9 +10,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
 
-        builder.HasIndex(x => x.Id)
+        builder.HasKey(x => x.Id)
             .IsClustered(false);
-
+        
         builder.HasIndex(x => x.CreatedOn)
             .IsClustered();
 

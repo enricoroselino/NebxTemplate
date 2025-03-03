@@ -17,6 +17,7 @@ builder.Services.AddLoggerSetup();
 builder.Services.AddJwtAuthenticationSetup();
 
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
+
 builder.Services.AddIdentityModule();
 
 builder.WebHost.ConfigureKestrel(options =>
@@ -31,6 +32,8 @@ app.UseDefaultSetup();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseIdentityModule();
 
 app.MapEndpoints();
 await app.RunAsync();

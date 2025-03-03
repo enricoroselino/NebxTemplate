@@ -12,7 +12,7 @@ using Modules.Identity.Data;
 namespace Modules.Identity.Data.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20250303024952_Initial")]
+    [Migration("20250303035027_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -58,13 +58,11 @@ namespace Modules.Identity.Data.Migrations
 
                     b.HasKey("Id");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
                     b.HasIndex("CreatedOn");
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("CreatedOn"));
-
-                    b.HasIndex("Id");
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Id"), false);
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -176,13 +174,11 @@ namespace Modules.Identity.Data.Migrations
 
                     b.HasKey("Id");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
                     b.HasIndex("CreatedOn");
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("CreatedOn"));
-
-                    b.HasIndex("Id");
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Id"), false);
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

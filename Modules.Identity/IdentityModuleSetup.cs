@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.API.Configurations;
+using BuildingBlocks.API.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +17,8 @@ public static class IdentityModuleSetup
     public static void AddIdentityModule(this IServiceCollection services)
     {
         services.AddModuleSetup(typeof(IdentityModuleSetup).Assembly);
-        
+
+        services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
 
         services.AddDbContext<AppIdentityDbContext>((provider, builder) =>
@@ -53,5 +56,10 @@ public static class IdentityModuleSetup
             .AddUserManager<UserManager<User>>()
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders();
+    }
+
+    public static void UseIdentityModule(this IApplicationBuilder app)
+    {
+        
     }
 }

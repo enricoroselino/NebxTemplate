@@ -10,9 +10,9 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
         builder.ToTable("Roles");
 
-        builder.HasIndex(x => x.Id)
+        builder.HasKey(x => x.Id)
             .IsClustered(false);
-
+        
         builder.HasIndex(x => x.CreatedOn)
             .IsClustered();
 

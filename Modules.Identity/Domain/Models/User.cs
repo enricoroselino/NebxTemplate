@@ -9,10 +9,6 @@ namespace Modules.Identity.Domain.Models;
 
 public class User : IdentityUser<Guid>, IEntity<Guid>
 {
-    private User()
-    {
-    }
-
     public override string UserName { get; set; } = string.Empty;
     public string FullName { get; private set; } = string.Empty;
     public override string NormalizedUserName { get; set; } = string.Empty;

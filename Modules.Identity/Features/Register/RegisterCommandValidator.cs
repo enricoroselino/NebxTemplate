@@ -13,10 +13,13 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
             .NotEmpty();
         
         RuleFor(x => x.PasswordConfirmation)
-            .NotEmpty();
+            .NotEmpty()
+            .Equal(x => x.Password)
+            .WithMessage("Password confirmation must match the password.");;
         
         RuleFor(x => x.Email)
-            .NotEmpty();
+            .NotEmpty()
+            .EmailAddress();;
         
         RuleFor(x => x.Fullname)
             .NotEmpty();
