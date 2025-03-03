@@ -28,10 +28,15 @@ public class UserRepository : IUserRepository
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.FullName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.EmailVerified, user.EmailConfirmed ? "1" : "0",
-                ClaimValueTypes.Integer32),
+            new Claim(JwtRegisteredClaimNames.EmailVerified, 
+                user.EmailConfirmed ? "1" : "0", ClaimValueTypes.Integer32),
         };
 
+        if (user.PhoneNumber is null) return informationClaims;
+
+        informationClaims.Add(new Claim(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber));
+        informationClaims.Add(new Claim(JwtRegisteredClaimNames.PhoneNumberVerified,
+            user.PhoneNumberConfirmed ? "1" : "0", ClaimValueTypes.Integer32));
         return informationClaims;
     }
 
