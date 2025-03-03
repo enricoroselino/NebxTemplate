@@ -28,7 +28,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
     {
         if (!_validators.Any()) return await next();
 
-        _logger.LogInformation("[{Prefix}] Validating request: {RequestType};", Prefix, typeof(TRequest).Name);
+        _logger.LogDebug("[{Prefix}] Validating request: {RequestType};", Prefix, typeof(TRequest).Name);
         var context = new ValidationContext<TRequest>(request);
 
         var failures = await Validate(_validators, context, cancellationToken);
@@ -39,7 +39,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
             throw new ValidationException(failures);
         }
 
-        _logger.LogInformation("[{Prefix}] Validation passed for {RequestType};", Prefix, typeof(TRequest).Name);
+        _logger.LogDebug("[{Prefix}] Validation passed for {RequestType};", Prefix, typeof(TRequest).Name);
         return await next();
     }
 
