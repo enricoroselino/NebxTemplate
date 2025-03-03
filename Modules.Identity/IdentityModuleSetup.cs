@@ -26,7 +26,7 @@ public static class IdentityModuleSetup
             var interceptors = provider.GetServices<ISaveChangesInterceptor>();
             builder.AddInterceptors(interceptors);
         });
-        
+
         services.AddIdentityCore<User>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -57,7 +57,6 @@ public static class IdentityModuleSetup
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders();
         
-        
         services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -65,8 +64,13 @@ public static class IdentityModuleSetup
         services.AddScoped<IClaimServices, ClaimServices>();
     }
 
-    public static void UseIdentityModule(this IApplicationBuilder app)
+    public static void UseIdentityModuleMiddlewares(this IApplicationBuilder app)
     {
         app.UseMiddleware<ClaimsTransformationMiddleware>();
+    }
+
+    public static void UseIdentityModule(this WebApplication app)
+    {
+        
     }
 }

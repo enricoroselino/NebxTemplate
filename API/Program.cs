@@ -31,6 +31,7 @@ var app = builder.Build();
 app.UseDefaultSetup();
 
 app.UseAuthentication();
+app.UseIdentityModuleMiddlewares();
 app.UseAuthorization();
 
 app.UseIdentityModule();
