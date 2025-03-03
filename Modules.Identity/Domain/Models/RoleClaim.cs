@@ -8,5 +8,5 @@ public class RoleClaim : IdentityRoleClaim<Guid>, ITimeAuditable
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role Role { get; init; } = null!;
 }

@@ -8,5 +8,5 @@ public class UserClaim : IdentityUserClaim<Guid>, ITimeAuditable
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual User User { get; init; } = null!;
 }

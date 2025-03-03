@@ -15,8 +15,8 @@ public class Role : IdentityRole<Guid>, IEntity<Guid>
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual ICollection<RoleClaim> RoleClaims { get; set; } = new List<RoleClaim>();
-    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public virtual ICollection<RoleClaim> RoleClaims { get; init; } = new List<RoleClaim>();
+    public virtual ICollection<UserRole> UserRoles { get; init; } = new List<UserRole>();
 
     public static Role Create(string name, string description)
     {
