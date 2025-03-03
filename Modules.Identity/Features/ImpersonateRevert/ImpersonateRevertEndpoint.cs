@@ -27,13 +27,14 @@ public class ImpersonateRevertEndpoint : IEndpoint
             {
                 var validateResult = ValidateUser(principal);
                 if (!validateResult.IsSuccess) return validateResult.ToResult(httpContext);
-                
+
                 var command = new ImpersonateRevertCommand(validateResult.Value);
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
             .WithName(nameof(ImpersonateRevertEndpoint))
             .WithTags(ApiMeta.Authentication.Tag)
+            .WithSummary("Exit impersonate mode")
             .RequireAuthorization();
     }
 

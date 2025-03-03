@@ -36,6 +36,7 @@ public class ImpersonateEndpoint : IEndpoint
             })
             .WithName(nameof(ImpersonateEndpoint))
             .WithTags(ApiMeta.Authentication.Tag)
+            .WithSummary("Get JWT of the impersonated user")
             .RequireAuthorization();
     }
 
