@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Shared;
 using Shared.Models.Exceptions;
 
 namespace BuildingBlocks.API.Extensions;
@@ -19,5 +20,10 @@ public static class ClaimExtensions
         var jti = claimsPrincipal.FindFirstValue(JwtRegisteredClaimNames.Jti);
         if (!Guid.TryParse(jti, out var tokenId) || Guid.Empty.Equals(tokenId)) throw new UnauthorizedException();
         return tokenId;
+    }
+    
+    public static bool IsImpersonating(this ClaimsPrincipal user)
+    {
+        return user.HasClaim(c => c.Type == CustomClaim.ImpersonatorId);
     }
 }
