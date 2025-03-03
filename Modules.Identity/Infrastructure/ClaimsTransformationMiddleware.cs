@@ -31,8 +31,7 @@ public class ClaimsTransformationMiddleware
         var userId = context.User.GetUserId();
         if (userId is null) throw new UnauthorizedAccessException();
 
-        logger.LogDebug("[{Prefix}] Starting claims transformation for UserId: {UserId};",
-            Prefix, userId);
+        logger.LogDebug("[{Prefix}] Starting claims transformation for UserId: {UserId};", Prefix, userId);
 
         var claims = await claimServices.GetClaims(userId.Value);
         if (claims.Count == 0)
@@ -46,8 +45,7 @@ public class ClaimsTransformationMiddleware
 
         context.User = new ClaimsPrincipal(newIdentity);
 
-        logger.LogDebug("[{Prefix}] Loaded {ClaimsCount} claims for UserId: {UserId};",
-            Prefix, claims.Count, userId);
+        logger.LogDebug("[{Prefix}] Loaded {ClaimsCount} claims for UserId: {UserId};", Prefix, claims.Count, userId);
         await _next(context);
     }
 }
