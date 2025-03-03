@@ -12,6 +12,8 @@ using Shared.Verdict;
 
 namespace Modules.Identity.Features.Impersonate;
 
+// TODO : make sure only admin can access
+
 public class ImpersonateEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
@@ -23,29 +25,35 @@ public class ImpersonateEndpoint : IEndpoint
                 HttpContext httpContext,
                 ClaimsPrincipal principal,
                 CancellationToken ct,
-                [FromQuery] Guid userId) =>
+                [FromQuery] Guid targetUserId) =>
             {
-                if (principal.IsImpersonating())
-                {
-                    return Verdict
-                        .BadRequest("Already in impersonation mode")
-                        .ToResult(httpContext);
-                }
+                var validateResult = ValidateUser(principal, targetUserId);
+                if (!validateResult.IsSuccess) return validateResult.ToResult(httpContext);
 
-                var impersonatorId = principal.GetUserId();
-                if (impersonatorId == userId)
-                {
-                    return Verdict
-                        .BadRequest("You cannot impersonate yourself")
-                        .ToResult(httpContext);
-                }
-
-                if (impersonatorId is null) throw new UnauthorizedException();
-                
-                var command = new ImpersonateCommand(userId, impersonatorId.Value);
+                var command = new ImpersonateCommand(targetUserId, validateResult.Value);
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
+            .WithName(nameof(ImpersonateEndpoint))
+            .WithTags(ApiMeta.Authentication.Tag)
             .RequireAuthorization();
+    }
+
+    private static Verdict<Guid> ValidateUser(ClaimsPrincipal principal, Guid targetUserId)
+    {
+        if (principal.IsImpersonating())
+        {
+            return Verdict.BadRequest("Already in impersonation mode");
+        }
+
+        var currentUser = principal.GetUserId();
+        if (currentUser == targetUserId)
+        {
+            return Verdict.BadRequest("You cannot impersonate yourself");
+        }
+
+        if (currentUser is null) throw new UnauthorizedException();
+
+        return Verdict.Success(currentUser.Value);
     }
 }
