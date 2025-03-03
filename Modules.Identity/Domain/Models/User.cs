@@ -16,6 +16,8 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     public override string NormalizedEmail { get; set; } = string.Empty;
     public override string PasswordHash { get; set; } = string.Empty;
     public int? CompatId { get; private set; }
+    public DateTime? LastLogin { get; private set; }
+    public bool IsActive { get; private set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
@@ -40,4 +42,7 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
             CompatId = compatId
         };
     }
+
+    public void Login(DateTime loginDate) => LastLogin = loginDate;
+    public void Deactivate() => IsActive = false;
 }

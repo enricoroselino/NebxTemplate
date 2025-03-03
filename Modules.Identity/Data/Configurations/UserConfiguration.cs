@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BuildingBlocks.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Modules.Identity.Domain.Models;
 
@@ -12,7 +13,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(x => x.Id)
             .IsClustered(false);
-        
+
         builder.HasIndex(x => x.CreatedOn)
             .IsClustered();
 
@@ -21,6 +22,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.FullName)
             .HasMaxLength(150)
+            .IsRequired();
+
+        builder.Property(x => x.LastLogin)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
             .IsRequired();
     }
 }
