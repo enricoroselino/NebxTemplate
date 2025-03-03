@@ -5,12 +5,8 @@ namespace Modules.Identity.Domain.Models;
 
 public class UserToken : IdentityUserToken<Guid>, ITimeAuditable
 {
-    private UserToken()
-    {
-    }
-
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
-    
+
     public virtual User User { get; set; } = null!;
 }

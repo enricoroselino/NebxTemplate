@@ -10,6 +10,11 @@ public class RoleClaimConfiguration : IEntityTypeConfiguration<RoleClaim>
     {
         builder.ToTable("RoleClaims");
         
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasOne(x => x.Role)
             .WithMany(x => x.RoleClaims)
             .HasForeignKey(x => x.RoleId);
