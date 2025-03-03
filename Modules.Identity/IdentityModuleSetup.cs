@@ -60,10 +60,11 @@ public static class IdentityModuleSetup
         services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
     }
 
     public static void UseIdentityModule(this IApplicationBuilder app)
     {
-        
+        // app.UseMiddleware<ClaimsTransformationMiddleware>();
     }
 }

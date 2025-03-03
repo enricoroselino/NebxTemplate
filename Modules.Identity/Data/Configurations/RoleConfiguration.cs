@@ -18,6 +18,10 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.Property(x => x.Id)
             .ValueGeneratedNever();
+        
+        builder.Property(x => x.Name)
+            .HasMaxLength(150)
+            .IsRequired();
 
         builder.Property(x => x.Description)
             .HasMaxLength(150)

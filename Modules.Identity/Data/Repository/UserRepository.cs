@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Modules.Identity.Domain.Models;
 
@@ -7,10 +8,18 @@ namespace Modules.Identity.Data.Repository;
 public interface IUserRepository
 {
     public List<Claim> GetInformationClaims(User user);
+    public Task<List<Claim>> GetUserClaims(User user);
 }
 
 public class UserRepository : IUserRepository
 {
+    private readonly UserManager<User> _userManager;
+
+    public UserRepository(UserManager<User> userManager)
+    {
+        _userManager = userManager;
+    }
+
     public List<Claim> GetInformationClaims(User user)
     {
         var informationClaims = new List<Claim>()
@@ -24,5 +33,11 @@ public class UserRepository : IUserRepository
         };
 
         return informationClaims;
+    }
+
+    public async Task<List<Claim>> GetUserClaims(User user)
+    {
+        var claims = await _userManager.GetClaimsAsync(user);
+        return claims.ToList();
     }
 }

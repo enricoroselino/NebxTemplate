@@ -14,6 +14,14 @@ public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
+        
+        builder.Property(x => x.ClaimType)
+            .HasMaxLength(150)
+            .IsRequired();
+
+        builder.Property(x => x.ClaimValue)
+            .HasMaxLength(150)
+            .IsRequired();
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.UserClaims)
