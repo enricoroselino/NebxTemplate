@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Models;
+using Modules.Identity.Domain.Services;
 using Modules.Identity.Infrastructure;
 
 namespace Modules.Identity;
@@ -61,10 +62,11 @@ public static class IdentityModuleSetup
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IClaimServices, ClaimServices>();
     }
 
     public static void UseIdentityModule(this IApplicationBuilder app)
     {
-        // app.UseMiddleware<ClaimsTransformationMiddleware>();
+        app.UseMiddleware<ClaimsTransformationMiddleware>();
     }
 }
