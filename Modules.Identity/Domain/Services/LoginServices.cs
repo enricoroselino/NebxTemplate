@@ -58,11 +58,11 @@ public class LoginServices : ILoginServices
 
         var loginDate = _timeProvider.GetUtcNow().DateTime;
         var refreshTokenExpiresOn = loginDate.AddSeconds(refreshToken.ExpiresOn);
+        
         var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshTokenExpiresOn);
-
-        user.Login(loginDate);
         await _dbContext.JwtStores.AddAsync(tokenData, ct);
-
+        user.Login(loginDate);
+        
         await _dbContext.SaveChangesAsync(ct);
         await transaction.CommitAsync(ct);
 
