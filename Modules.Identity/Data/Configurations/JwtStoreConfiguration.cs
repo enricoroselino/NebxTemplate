@@ -32,5 +32,9 @@ public class JwtStoreConfiguration : IEntityTypeConfiguration<JwtStore>
 
         builder.Property(x => x.ExpiresOn)
             .IsRequired();
+
+        builder.HasOne(x => x.User)
+            .WithMany(x => x.JwtStores)
+            .HasForeignKey(x => x.UserId);
     }
 }

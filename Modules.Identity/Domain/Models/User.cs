@@ -25,6 +25,7 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     public virtual ICollection<UserClaim> UserClaims { get; private set; } = new List<UserClaim>();
     public virtual ICollection<UserLogin> UserLogins { get; private set; } = new List<UserLogin>();
     public virtual ICollection<UserToken> UserTokens { get; private set; } = new List<UserToken>();
+    public virtual ICollection<JwtStore> JwtStores { get; private set; } = new List<JwtStore>();
 
     public static User Create(string username, string email, string fullname, int? compatId = null)
     {
