@@ -1,6 +1,5 @@
 using BuildingBlocks.API.Models.CQRS;
 using BuildingBlocks.API.Services.JwtManager;
-using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Shared.Models.Responses;
 using Shared.Verdict;
@@ -13,15 +12,14 @@ public class ImpersonateRevertCommandHandler
     private readonly IUserRepository _userRepository;
     private readonly IJwtManager _jwtManager;
 
-    public ImpersonateRevertCommandHandler(
-        IUserRepository userRepository,
-        IJwtManager jwtManager)
+    public ImpersonateRevertCommandHandler(IUserRepository userRepository, IJwtManager jwtManager)
     {
         _userRepository = userRepository;
         _jwtManager = jwtManager;
     }
 
-    public async Task<Verdict<Response<ImpersonateRevertResponse>>> Handle(ImpersonateRevertCommand request,
+    public async Task<Verdict<Response<ImpersonateRevertResponse>>> Handle(
+        ImpersonateRevertCommand request,
         CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUser(userId: request.ImpersonatorId, tracking: false, ct: cancellationToken);
