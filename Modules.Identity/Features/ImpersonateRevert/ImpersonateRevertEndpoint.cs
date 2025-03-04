@@ -25,10 +25,23 @@ public class ImpersonateRevertEndpoint : IEndpoint
                 ClaimsPrincipal principal,
                 CancellationToken ct) =>
             {
-                var validateResult = ValidateUser(principal);
-                if (!validateResult.IsSuccess) return validateResult.ToResult(httpContext);
+                var impersonatorResult = ValidateImpersonator(principal);
+                if (!impersonatorResult.IsSuccess) return impersonatorResult.ToResult(httpContext);
 
-                var command = new ImpersonateRevertCommand(validateResult.Value);
+                var impersonatorUserId = impersonatorResult.Value;
+                
+                var targetTokenId = principal.GetTokenId();
+                var targetUserId = principal.GetUserId();
+                if (targetTokenId is null || targetUserId is null)
+                {
+                    return Verdict.Unauthorized().ToResult(httpContext);
+                } 
+
+                var command = new ImpersonateRevertCommand(
+                    targetUserId.Value, 
+                    targetTokenId.Value, 
+                    impersonatorUserId);
+                
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
@@ -38,15 +51,14 @@ public class ImpersonateRevertEndpoint : IEndpoint
             .RequireAuthorization();
     }
 
-    private static Verdict<Guid> ValidateUser(ClaimsPrincipal principal)
+    private static Verdict<Guid> ValidateImpersonator(ClaimsPrincipal principal)
     {
         if (!principal.IsImpersonating())
         {
             return Verdict.BadRequest("Not currently impersonating an user");
         }
 
-        var impersonatorId = principal.GetImpersonatorId();
-        if (impersonatorId is null) throw new UnauthorizedException();
-        return Verdict.Success(impersonatorId.Value);
+        var impersonatorId = principal.GetImpersonatorUserId();
+        return impersonatorId is null ? Verdict.Unauthorized() : Verdict.Success(impersonatorId.Value);
     }
 }

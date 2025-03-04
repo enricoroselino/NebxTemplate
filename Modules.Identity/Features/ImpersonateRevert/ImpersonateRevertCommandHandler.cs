@@ -1,8 +1,7 @@
 using BuildingBlocks.API.Models.CQRS;
-using BuildingBlocks.API.Services.JwtManager;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
-using Modules.Identity.Domain.Models;
+using Modules.Identity.Domain.Services;
 using Shared.Models.Responses;
 using Shared.Verdict;
 
@@ -12,41 +11,48 @@ public class ImpersonateRevertCommandHandler
     : ICommandHandler<ImpersonateRevertCommand, Verdict<Response<ImpersonateRevertResponse>>>
 {
     private readonly IUserRepository _userRepository;
-    private readonly IJwtManager _jwtManager;
-    private readonly TimeProvider _timeProvider;
+    private readonly ITokenServices _tokenServices;
     private readonly AppIdentityDbContext _dbContext;
 
     public ImpersonateRevertCommandHandler(
         IUserRepository userRepository,
-        IJwtManager jwtManager,
-        AppIdentityDbContext dbContext,
-        TimeProvider timeProvider)
+        ITokenServices tokenServices,
+        AppIdentityDbContext dbContext)
     {
         _userRepository = userRepository;
-        _jwtManager = jwtManager;
+        _tokenServices = tokenServices;
         _dbContext = dbContext;
-        _timeProvider = timeProvider;
     }
 
     public async Task<Verdict<Response<ImpersonateRevertResponse>>> Handle(
         ImpersonateRevertCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUser(userId: request.ImpersonatorId, tracking: false, ct: cancellationToken);
-        if (user is null) return Verdict.NotFound("User not found");
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
-        var claims = _userRepository.GetInformationClaims(user);
-        var accessToken = _jwtManager.CreateAccessToken(claims);
-        var refreshToken = _jwtManager.CreateRefreshToken();
+        var impersonatorUser = await _userRepository.GetUser(
+            userId: request.ImpersonatorUserId,
+            tracking: false,
+            ct: cancellationToken);
 
-        var revertDate = _timeProvider.GetUtcNow().DateTime;
-        var refreshTokenExpiresOn = revertDate.AddSeconds(refreshToken.ExpiresOn);
+        if (impersonatorUser is null) return Verdict.NotFound("User not found");
 
-        var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshTokenExpiresOn);
-        await _dbContext.JwtStores.AddAsync(tokenData, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        // revoke impersonated token
+        var revokeResult = await _tokenServices.RevokeToken(
+            request.TargetUserId,
+            request.TargetTokenId,
+            cancellationToken);
 
-        var responseDto = new ImpersonateRevertResponse(accessToken, refreshToken);
+        if (!revokeResult.IsSuccess) return Verdict.InternalError(revokeResult.ErrorMessage);
+
+        // track reverted user token
+        var claims = _userRepository.GetInformationClaims(impersonatorUser);
+        var issueResult = await _tokenServices.IssueToken(impersonatorUser, claims, cancellationToken);
+        if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);
+
+        await transaction.CommitAsync(cancellationToken);
+
+        var responseDto = new ImpersonateRevertResponse(issueResult.Value.AccessToken, issueResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
         return Verdict.Success(response);
     }
