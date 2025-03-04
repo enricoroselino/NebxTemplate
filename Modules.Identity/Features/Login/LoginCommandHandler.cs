@@ -1,10 +1,5 @@
 using BuildingBlocks.API.Models.CQRS;
-using BuildingBlocks.API.Services.JwtManager;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Modules.Identity.Data;
-using Modules.Identity.Data.Repository;
-using Modules.Identity.Domain.Models;
+using Modules.Identity.Domain.Services;
 using Shared.Models.Responses;
 using Shared.Verdict;
 
@@ -12,46 +7,21 @@ namespace Modules.Identity.Features.Login;
 
 public class LoginCommandHandler : ICommandHandler<LoginCommand, Verdict<Response<LoginResponse>>>
 {
-    private readonly AppIdentityDbContext _dbContext;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IUserRepository _userRepository;
-    private readonly IJwtManager _jwtManager;
-    private readonly TimeProvider _time;
+    private readonly ILoginServices _loginServices;
 
-    public LoginCommandHandler(
-        AppIdentityDbContext dbContext,
-        SignInManager<User> signInManager,
-        IUserRepository userRepository,
-        IJwtManager jwtManager,
-        TimeProvider time)
+    public LoginCommandHandler(ILoginServices loginServices)
     {
-        _dbContext = dbContext;
-        _signInManager = signInManager;
-        _userRepository = userRepository;
-        _jwtManager = jwtManager;
-        _time = time;
+        _loginServices = loginServices;
     }
 
     public async Task<Verdict<Response<LoginResponse>>> Handle(
         LoginCommand request,
         CancellationToken cancellationToken)
     {
-        var loginDate = _time.GetUtcNow().DateTime;
+        var tokenResult = await _loginServices.Authenticate(request.Identifier, request.Password, ct: cancellationToken);
+        if (!tokenResult.IsSuccess) return Verdict.Unauthorized(tokenResult.ErrorMessage);
 
-        var user = await _userRepository.GetUser(identifier: request.Identifier, tracking: true, ct: cancellationToken);
-        if (user is null) return Verdict.Unauthorized("Username or password is incorrect");
-
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-        if (!result.Succeeded) return Verdict.Unauthorized("Username or password is incorrect");
-
-        user.Login(loginDate);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var claims = _userRepository.GetInformationClaims(user);
-        var accessToken = _jwtManager.CreateAccessToken(claims);
-        var refreshToken = _jwtManager.CreateRefreshToken();
-
-        var responseDto = new LoginResponse(accessToken, refreshToken);
+        var responseDto = new LoginResponse(tokenResult.Value.AccessToken, tokenResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
         return Verdict.Success(response);
     }

@@ -3,12 +3,12 @@
 public class TokenResult
 {
     public string Value { get; private set; }
-    public int ExpiresIn { get; private set; }
+    public int ExpiresOn { get; private set; }
 
-    protected TokenResult(string value, int expiresIn)
+    protected TokenResult(string value, int expiresOn)
     {
         Value = value;
-        ExpiresIn = expiresIn;
+        ExpiresOn = expiresOn;
     }
 
     public static TokenResult Create(string value, int expiresIn)
@@ -24,7 +24,7 @@ public class TokenResult
 
 public class TokenResult<TId> : TokenResult
 {
-    internal TokenResult(TId id, string value, int expiresIn) : base(value, expiresIn)
+    internal TokenResult(TId id, string value, int expiresOn) : base(value, expiresOn)
     {
         Id = id;
     }

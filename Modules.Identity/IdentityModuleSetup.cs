@@ -57,21 +57,24 @@ public static class IdentityModuleSetup
             .AddUserManager<UserManager<User>>()
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders();
-        
+
         services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+
         services.AddScoped<IClaimServices, ClaimServices>();
+        services.AddScoped<ILoginServices, LoginServices>();
     }
 
     public static void UseIdentityModuleMiddlewares(this IApplicationBuilder app)
     {
+        app.UseMiddleware<RevokedTokenMiddleware>();
         app.UseMiddleware<ClaimsTransformationMiddleware>();
     }
 
     public static void UseIdentityModule(this WebApplication app)
     {
-        
     }
 }
