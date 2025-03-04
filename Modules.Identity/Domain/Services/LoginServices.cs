@@ -11,8 +11,8 @@ namespace Modules.Identity.Domain.Services;
 public interface ILoginServices
 {
     public Task<Verdict<TokenResultPair>> Authenticate(
-        string identifier, 
-        string password, 
+        string identifier,
+        string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default);
 }
@@ -22,24 +22,22 @@ public class LoginServices : ILoginServices
     private readonly AppIdentityDbContext _dbContext;
     private readonly SignInManager<User> _signInManager;
     private readonly IUserRepository _userRepository;
-    private readonly IJwtManager _jwtManager;
-    private readonly TimeProvider _timeProvider;
+    private readonly ITokenServices _tokenServices;
 
     public LoginServices(
         AppIdentityDbContext dbContext,
         SignInManager<User> signInManager,
         IUserRepository userRepository,
-        IJwtManager jwtManager,
-        TimeProvider timeProvider)
+        ITokenServices tokenServices)
     {
         _dbContext = dbContext;
         _signInManager = signInManager;
         _userRepository = userRepository;
-        _jwtManager = jwtManager;
-        _timeProvider = timeProvider;
+        _tokenServices = tokenServices;
     }
 
-    public async Task<Verdict<TokenResultPair>> Authenticate(string identifier,
+    public async Task<Verdict<TokenResultPair>> Authenticate(
+        string identifier,
         string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default)
@@ -52,21 +50,19 @@ public class LoginServices : ILoginServices
         var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         if (!result.Succeeded) return Verdict.Unauthorized("Username or password is incorrect");
 
-        var claims = _userRepository.GetInformationClaims(user);
-        var accessToken = _jwtManager.CreateAccessToken(claims.Concat(addOnClaims ?? []).ToList());
-        var refreshToken = _jwtManager.CreateRefreshToken();
+        var claims = _userRepository
+            .GetInformationClaims(user)
+            .Concat(addOnClaims ?? [])
+            .ToList();
 
-        var loginDate = _timeProvider.GetUtcNow().DateTime;
-        var refreshTokenExpiresOn = loginDate.AddSeconds(refreshToken.ExpiresOn);
-        
-        user.Login(loginDate);
-        var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshTokenExpiresOn);
-        await _dbContext.JwtStores.AddAsync(tokenData, ct);
-        
+        var issueResult = await _tokenServices.IssueToken(user, claims, ct);
+        if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);
+
+        user.Login();
         await _dbContext.SaveChangesAsync(ct);
         await transaction.CommitAsync(ct);
 
-        var resultDto = new TokenResultPair(accessToken, refreshToken);
+        var resultDto = issueResult.Value;
         return Verdict.Success(resultDto);
     }
 }
