@@ -64,7 +64,7 @@ public class RevokedTokenMiddleware
             .SingleOrDefaultAsync();
 
         var currentTime = timeProvider.GetUtcNow().DateTime;
-        if (token is null || token.RevokedOn is not null || token.ExpiresOn >= currentTime)
+        if (token is null || token.RevokedOn is not null || currentTime >= token.ExpiresOn)
         {
             logger.LogDebug("[{Prefix}] Token JTI: {Jti} is not valid. Rejecting request;", Prefix, jti);
             throw new UnauthorizedException();
