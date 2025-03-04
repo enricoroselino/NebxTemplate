@@ -30,7 +30,8 @@ public class ClaimServices : IClaimServices
         var userClaims = await _userRepository.GetUserClaims(user);
         var roleClaims = await _roleRepository.GetRoleClaims(user, ct);
         var roles = await _roleRepository.GetRoles(user, ct);
+        var informationClaims = _userRepository.GetInformationClaims(user);
 
-        return [..userClaims, ..roleClaims, ..roles];
+        return [..userClaims, ..roleClaims, ..roles, ..informationClaims];
     }
 }
