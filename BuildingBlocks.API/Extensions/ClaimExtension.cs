@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Shared;
-using Shared.Models.Exceptions;
 
 namespace BuildingBlocks.API.Extensions;
 
@@ -9,8 +8,11 @@ public static class ClaimExtensions
 {
     public static Guid? GetUserId(this ClaimsPrincipal user)
     {
-        // somehow the 'sub' is translated into ClaimsTypes.NameIdentifier
-        var sub = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        var sub = user.Claims
+            .Where(x => x.Type is ClaimTypes.NameIdentifier or JwtRegisteredClaimNames.Sub)
+            .Select(x => x.Value)
+            .FirstOrDefault();
+
         if (!Guid.TryParse(sub, out var userId) || Guid.Empty.Equals(userId)) return null;
         return userId;
     }
@@ -26,7 +28,7 @@ public static class ClaimExtensions
     {
         return user.HasClaim(c => c.Type == CustomClaim.ImpersonatorId);
     }
-    
+
     public static Guid? GetImpersonatorId(this ClaimsPrincipal user)
     {
         var sub = user.FindFirstValue(CustomClaim.ImpersonatorId);
