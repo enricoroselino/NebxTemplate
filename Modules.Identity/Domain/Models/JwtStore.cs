@@ -19,7 +19,7 @@ public class JwtStore : Entity<Guid>
     public static JwtStore Create(Guid userId, Guid tokenId, string refreshToken, long expiresOn)
     {
         var expire = DateTime.UtcNow.AddSeconds(expiresOn);
-        
+
         return new JwtStore()
         {
             Id = Guid.CreateVersion7(),
@@ -36,10 +36,13 @@ public class JwtStore : Entity<Guid>
 
     public void UnRevoke() => RevokedOn = null;
 
-    public void Update(Guid tokenId, string refreshToken, DateTime expiresOn)
+    public void Update(Guid tokenId, string refreshToken, long expiresOn)
     {
+        var expire = DateTime.UtcNow.AddSeconds(expiresOn);
+
         TokenId = tokenId;
         RefreshToken = refreshToken;
-        ExpiresOn = expiresOn;
+        ExpiresOn = Guard.Against.NullOrOutOfSQLDateRange(expire, nameof(expiresOn),
+            exceptionCreator: () => new DomainException("Expires time is not valid."));
     }
 }
