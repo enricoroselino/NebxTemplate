@@ -11,6 +11,13 @@ public interface ITokenServices
 {
     public Task<Verdict> RevokeToken(Guid userId, Guid tokenId, CancellationToken ct = default);
     public Task<Verdict<TokenResultPair>> IssueToken(User user, List<Claim> claims, CancellationToken ct = default);
+
+    public Task<Verdict<TokenResultPair>> RefreshToken(
+        User user,
+        Guid tokenId,
+        string refreshToken,
+        List<Claim> claims, 
+        CancellationToken ct = default);
 }
 
 public class TokenServices : ITokenServices
@@ -45,12 +52,37 @@ public class TokenServices : ITokenServices
     {
         var accessToken = _jwtManager.CreateAccessToken(claims);
         var refreshToken = _jwtManager.CreateRefreshToken();
-        
+
         var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshToken.ExpiresOn);
         await _dbContext.JwtStores.AddAsync(tokenData, ct);
         await _dbContext.SaveChangesAsync(ct);
 
         var tokenPairDto = new TokenResultPair(accessToken, refreshToken);
+        return Verdict.Success(tokenPairDto);
+    }
+
+    public async Task<Verdict<TokenResultPair>> RefreshToken(
+        User user,
+        Guid tokenId,
+        string refreshToken,
+        List<Claim> claims,
+        CancellationToken ct = default)
+    {
+        var tokenData = await _dbContext.JwtStores
+            .Where(x => x.UserId == user.Id && x.TokenId == tokenId)
+            .Where(x => x.RevokedOn == null && x.ExpiresOn > DateTime.UtcNow)
+            .SingleOrDefaultAsync(ct);
+
+        if (tokenData is null) return Verdict.InternalError("Token data not found");
+        if (!tokenData.RefreshToken.Equals(refreshToken)) return Verdict.InternalError("Refresh token not match");
+
+        var newAccessToken = _jwtManager.CreateAccessToken(claims);
+        var newRefreshToken = _jwtManager.CreateRefreshToken();
+        
+        tokenData.Update(newAccessToken.Id, newRefreshToken.Value, newRefreshToken.ExpiresOn);
+        await _dbContext.SaveChangesAsync(ct);
+        
+        var tokenPairDto = new TokenResultPair(newAccessToken, newRefreshToken);
         return Verdict.Success(tokenPairDto);
     }
 }
