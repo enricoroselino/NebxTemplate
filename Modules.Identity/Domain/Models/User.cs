@@ -44,6 +44,6 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
         };
     }
 
-    public void Login(DateTime loginDate) => LastLogin = loginDate;
+    public void Login() => LastLogin = DateTime.UtcNow;
     public void Deactivate() => IsActive = false;
 }
