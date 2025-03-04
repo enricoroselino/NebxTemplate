@@ -19,6 +19,8 @@ public class AppIdentityDbContext
 
     private const string Schema = "Identity";
 
+    public DbSet<JwtStore> JwtStores { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
