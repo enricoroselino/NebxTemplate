@@ -1,9 +1,8 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.API.Models.CQRS;
-using BuildingBlocks.API.Services.JwtManager;
-using Microsoft.EntityFrameworkCore;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
+using Modules.Identity.Domain.Services;
 using Shared;
 using Shared.Models.Responses;
 using Shared.Verdict;
@@ -13,46 +12,49 @@ namespace Modules.Identity.Features.Impersonate;
 public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Verdict<Response<ImpersonateResponse>>>
 {
     private readonly IUserRepository _userRepository;
-    private readonly IJwtManager _jwtManager;
+    private readonly ITokenServices _tokenServices;
     private readonly AppIdentityDbContext _dbContext;
-    private readonly TimeProvider _timeProvider;
 
     public ImpersonateCommandHandler(
-        IUserRepository userRepository,
-        IJwtManager jwtManager,
-        AppIdentityDbContext dbContext,
-        TimeProvider timeProvider)
+        IUserRepository userRepository, 
+        ITokenServices tokenServices, 
+        AppIdentityDbContext dbContext)
     {
         _userRepository = userRepository;
-        _jwtManager = jwtManager;
+        _tokenServices = tokenServices;
         _dbContext = dbContext;
-        _timeProvider = timeProvider;
     }
 
-    public async Task<Verdict<Response<ImpersonateResponse>>> Handle(ImpersonateCommand request,
+    public async Task<Verdict<Response<ImpersonateResponse>>> Handle(
+        ImpersonateCommand request,
         CancellationToken cancellationToken)
     {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        
         var targetUser = await _userRepository.GetUser(userId: request.TargetUserId, tracking: false, ct: cancellationToken);
         if (targetUser is null) return Verdict.NotFound("User not found");
 
-        var claims = _userRepository.GetInformationClaims(targetUser);
-        claims.Add(new Claim(CustomClaim.ImpersonatorId, request.CurrentUserId.ToString()));
+        var impersonatorClaim = new Claim(CustomClaim.ImpersonatorId, request.ImpersonatorUserId.ToString());
+        var claims = _userRepository
+            .GetInformationClaims(targetUser)
+            .Concat([impersonatorClaim])
+            .ToList();
 
-        var accessToken = _jwtManager.CreateAccessToken(claims);
-        var refreshToken = _jwtManager.CreateRefreshToken();
+        // revoke current user token
+        var revokeResult = await _tokenServices.RevokeToken(
+            request.ImpersonatorUserId,
+            request.ImpersonatorTokenId,
+            cancellationToken);
 
-        var tokenData = await _dbContext.JwtStores
-            .SingleOrDefaultAsync(x =>
-                x.UserId == request.CurrentUserId &&
-                x.TokenId == request.TokenId, cancellationToken);
+        if (!revokeResult.IsSuccess) return revokeResult;
 
-        if (tokenData is null) return Verdict.NotFound("Token data not found");
+        // track impersonated token
+        var issueResult = await _tokenServices.IssueToken(targetUser, claims, cancellationToken);
+        if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);
+        
+        await transaction.CommitAsync(cancellationToken);
 
-        var revokedOn = _timeProvider.GetUtcNow().DateTime;
-        tokenData.Revoke(revokedOn);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var responseDto = new ImpersonateResponse(accessToken, refreshToken);
+        var responseDto = new ImpersonateResponse(issueResult.Value.AccessToken, issueResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
         return Verdict.Success(response);
     }

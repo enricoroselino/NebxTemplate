@@ -7,6 +7,6 @@ public class ImpersonateCommandValidator : AbstractValidator<ImpersonateCommand>
     public ImpersonateCommandValidator()
     {
         RuleFor(x => x.TargetUserId).NotEmpty();
-        RuleFor(x => x.CurrentUserId).NotEmpty();
+        RuleFor(x => x.ImpersonatorUserId).NotEmpty();
     }
 }
