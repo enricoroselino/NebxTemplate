@@ -8,23 +8,23 @@ using Shared.Verdict;
 
 namespace Modules.Identity.Domain.Services;
 
-public interface ILoginServices
+public interface IAuthServices
 {
-    public Task<Verdict<TokenResultPair>> Authenticate(
+    public Task<Verdict<TokenResultPair>> Login(
         string identifier,
         string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default);
 }
 
-public class LoginServices : ILoginServices
+public class AuthServices : IAuthServices
 {
     private readonly AppIdentityDbContext _dbContext;
     private readonly SignInManager<User> _signInManager;
     private readonly IUserRepository _userRepository;
     private readonly ITokenServices _tokenServices;
 
-    public LoginServices(
+    public AuthServices(
         AppIdentityDbContext dbContext,
         SignInManager<User> signInManager,
         IUserRepository userRepository,
@@ -36,7 +36,7 @@ public class LoginServices : ILoginServices
         _tokenServices = tokenServices;
     }
 
-    public async Task<Verdict<TokenResultPair>> Authenticate(
+    public async Task<Verdict<TokenResultPair>> Login(
         string identifier,
         string password,
         List<Claim>? addOnClaims = null,

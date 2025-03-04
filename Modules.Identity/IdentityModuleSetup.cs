@@ -65,7 +65,7 @@ public static class IdentityModuleSetup
         services.AddScoped<IRoleRepository, RoleRepository>();
 
         services.AddScoped<IClaimServices, ClaimServices>();
-        services.AddScoped<ILoginServices, LoginServices>();
+        services.AddScoped<IAuthServices, AuthServices>();
         services.AddScoped<ITokenServices, TokenServices>();
     }
 

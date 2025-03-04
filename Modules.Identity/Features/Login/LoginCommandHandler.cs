@@ -7,21 +7,21 @@ namespace Modules.Identity.Features.Login;
 
 public class LoginCommandHandler : ICommandHandler<LoginCommand, Verdict<Response<LoginResponse>>>
 {
-    private readonly ILoginServices _loginServices;
+    private readonly IAuthServices _authServices;
 
-    public LoginCommandHandler(ILoginServices loginServices)
+    public LoginCommandHandler(IAuthServices authServices)
     {
-        _loginServices = loginServices;
+        _authServices = authServices;
     }
 
     public async Task<Verdict<Response<LoginResponse>>> Handle(
         LoginCommand request,
         CancellationToken cancellationToken)
     {
-        var tokenResult = await _loginServices.Authenticate(request.Identifier, request.Password, ct: cancellationToken);
-        if (!tokenResult.IsSuccess) return Verdict.Unauthorized(tokenResult.ErrorMessage);
+        var loginResult = await _authServices.Login(request.Identifier, request.Password, ct: cancellationToken);
+        if (!loginResult.IsSuccess) return Verdict.Unauthorized(loginResult.ErrorMessage);
 
-        var responseDto = new LoginResponse(tokenResult.Value.AccessToken, tokenResult.Value.RefreshToken);
+        var responseDto = new LoginResponse(loginResult.Value.AccessToken, loginResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
         return Verdict.Success(response);
     }
