@@ -29,7 +29,7 @@ public static class ClaimExtensions
         return user.HasClaim(c => c.Type == CustomClaim.ImpersonatorId);
     }
 
-    public static Guid? GetImpersonatorId(this ClaimsPrincipal user)
+    public static Guid? GetImpersonatorUserId(this ClaimsPrincipal user)
     {
         var sub = user.FindFirstValue(CustomClaim.ImpersonatorId);
         if (!Guid.TryParse(sub, out var userId) || Guid.Empty.Equals(userId)) return null;
