@@ -29,14 +29,6 @@ public class RevokedTokenMiddleware
         TimeProvider timeProvider,
         ILogger<RevokedTokenMiddleware> logger)
     {
-        // check if in impersonating mode
-        var isImpersonating = context.User.Claims.Any(x => x.Type == CustomClaim.ImpersonatorId);
-        if (isImpersonating)
-        {
-            await _next(context);
-            return;
-        }
-
         // check if the endpoint need authorization
         var endpoint = context.GetEndpoint();
         if (endpoint?.Metadata.GetMetadata<IAllowAnonymous>() is not null ||
@@ -46,17 +38,15 @@ public class RevokedTokenMiddleware
             return;
         }
 
-        var jti = context.User.GetTokenId();
-        if (jti is null) throw new UnauthorizedException();
-
-        var userId = context.User.GetUserId();
-        if (userId is null) throw new UnauthorizedException();
-
         if (context.User.Identity is not ClaimsIdentity { IsAuthenticated: true })
         {
             await _next(context);
             return;
         }
+
+        var jti = context.User.GetTokenId();
+        var userId = context.User.GetUserId();
+        if (jti is null || userId is null) throw new UnauthorizedException();
 
         var token = await dbContext.JwtStores
             .AsNoTracking()
