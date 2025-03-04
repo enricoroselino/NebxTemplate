@@ -4,4 +4,5 @@ using Shared.Verdict;
 
 namespace Modules.Identity.Features.Impersonate;
 
-public record ImpersonateCommand(Guid UserId, Guid CurrentUserId) : ICommand<Verdict<Response<ImpersonateResponse>>>;
+public record ImpersonateCommand(Guid TargetUserId, Guid CurrentUserId, Guid TokenId)
+    : ICommand<Verdict<Response<ImpersonateResponse>>>;

@@ -30,7 +30,10 @@ public class ImpersonateEndpoint : IEndpoint
                 var validateResult = ValidateUser(principal, targetUserId);
                 if (!validateResult.IsSuccess) return validateResult.ToResult(httpContext);
 
-                var command = new ImpersonateCommand(targetUserId, validateResult.Value);
+                var jti = principal.GetTokenId();
+                if (jti is null) throw new UnauthorizedException();
+                
+                var command = new ImpersonateCommand(targetUserId, validateResult.Value, jti.Value);
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
