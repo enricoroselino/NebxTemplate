@@ -26,12 +26,12 @@ public static class ClaimExtensions
 
     public static bool IsImpersonating(this ClaimsPrincipal user)
     {
-        return user.HasClaim(c => c.Type == CustomClaim.ImpersonatorId);
+        return user.HasClaim(c => c.Type == CustomClaim.ImpersonatorUserId);
     }
 
     public static Guid? GetImpersonatorUserId(this ClaimsPrincipal user)
     {
-        var sub = user.FindFirstValue(CustomClaim.ImpersonatorId);
+        var sub = user.FindFirstValue(CustomClaim.ImpersonatorUserId);
         if (!Guid.TryParse(sub, out var userId) || Guid.Empty.Equals(userId)) return null;
         return userId;
     }

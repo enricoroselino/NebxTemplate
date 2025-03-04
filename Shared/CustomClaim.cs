@@ -2,5 +2,5 @@
 
 public static class CustomClaim
 {
-    public const string ImpersonatorId = "impersonator_user_id";
+    public const string ImpersonatorUserId = "impersonator_user_id";
 }

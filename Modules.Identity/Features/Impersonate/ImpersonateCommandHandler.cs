@@ -34,7 +34,7 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
         var targetUser = await _userRepository.GetUser(userId: request.TargetUserId, tracking: false, ct: cancellationToken);
         if (targetUser is null) return Verdict.NotFound("User not found");
 
-        var impersonatorClaim = new Claim(CustomClaim.ImpersonatorId, request.ImpersonatorUserId.ToString());
+        var impersonatorClaim = new Claim(CustomClaim.ImpersonatorUserId, request.ImpersonatorUserId.ToString());
         var claims = _userRepository
             .GetInformationClaims(targetUser)
             .Concat([impersonatorClaim])
