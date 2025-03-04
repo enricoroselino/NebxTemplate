@@ -16,13 +16,11 @@ public interface ITokenServices
 public class TokenServices : ITokenServices
 {
     private readonly AppIdentityDbContext _dbContext;
-    private readonly TimeProvider _timeProvider;
     private readonly IJwtManager _jwtManager;
 
-    public TokenServices(AppIdentityDbContext dbContext, TimeProvider timeProvider, IJwtManager jwtManager)
+    public TokenServices(AppIdentityDbContext dbContext, IJwtManager jwtManager)
     {
         _dbContext = dbContext;
-        _timeProvider = timeProvider;
         _jwtManager = jwtManager;
     }
 
@@ -35,9 +33,7 @@ public class TokenServices : ITokenServices
             .SingleOrDefaultAsync(x => x.UserId == userId && x.TokenId == tokenId, ct);
         if (tokenData is null) return Verdict.InternalError("Token data not found");
 
-        var revokedOn = _timeProvider.GetUtcNow().DateTime;
-        tokenData.Revoke(revokedOn);
-        
+        tokenData.Revoke();
         await _dbContext.SaveChangesAsync(ct);
         return Verdict.Success();
     }
@@ -49,11 +45,8 @@ public class TokenServices : ITokenServices
     {
         var accessToken = _jwtManager.CreateAccessToken(claims);
         var refreshToken = _jwtManager.CreateRefreshToken();
-
-        var issueDate = _timeProvider.GetUtcNow().DateTime;
-        var expiresOn = issueDate.AddSeconds(refreshToken.ExpiresOn);
-        var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, expiresOn);
-
+        
+        var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshToken.ExpiresOn);
         await _dbContext.JwtStores.AddAsync(tokenData, ct);
         await _dbContext.SaveChangesAsync(ct);
 

@@ -3,7 +3,7 @@
 public class TokenResult
 {
     public string Value { get; private set; }
-    public int ExpiresOn { get; private set; }
+    public long ExpiresOn { get; private set; }
 
     protected TokenResult(string value, int expiresOn)
     {

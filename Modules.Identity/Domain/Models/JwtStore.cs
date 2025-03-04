@@ -16,8 +16,10 @@ public class JwtStore : Entity<Guid>
     public DateTime ExpiresOn { get; private set; }
     public DateTime? RevokedOn { get; private set; }
 
-    public static JwtStore Create(Guid userId, Guid tokenId, string refreshToken, DateTime expiresOn)
+    public static JwtStore Create(Guid userId, Guid tokenId, string refreshToken, long expiresOn)
     {
+        var expire = DateTime.UtcNow.AddSeconds(expiresOn);
+        
         return new JwtStore()
         {
             Id = Guid.CreateVersion7(),
@@ -25,14 +27,12 @@ public class JwtStore : Entity<Guid>
             TokenId = tokenId,
             RefreshToken = Guard.Against.NullOrWhiteSpace(refreshToken, nameof(refreshToken),
                 exceptionCreator: () => new DomainException("Refresh token cannot be empty.")),
-            ExpiresOn = Guard.Against.NullOrOutOfSQLDateRange(expiresOn, nameof(expiresOn),
+            ExpiresOn = Guard.Against.NullOrOutOfSQLDateRange(expire, nameof(expiresOn),
                 exceptionCreator: () => new DomainException("Expires time is not valid.")),
         };
     }
 
-    public void Revoke(DateTime revokedOn) => RevokedOn = Guard.Against
-        .NullOrOutOfSQLDateRange(revokedOn, nameof(revokedOn),
-            exceptionCreator: () => new DomainException("Revoked time is not valid."));
+    public void Revoke() => RevokedOn = DateTime.UtcNow;
 
     public void UnRevoke() => RevokedOn = null;
 
