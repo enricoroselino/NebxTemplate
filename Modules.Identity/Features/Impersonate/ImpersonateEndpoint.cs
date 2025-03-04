@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using BuildingBlocks.API.Configurations.Endpoint;
-using BuildingBlocks.API.Extensions;
+﻿using BuildingBlocks.API.Configurations.Endpoint;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Modules.Identity.Constants;
 using Shared.Models.Exceptions;
-using Shared.Verdict;
 
 namespace Modules.Identity.Features.Impersonate;
 

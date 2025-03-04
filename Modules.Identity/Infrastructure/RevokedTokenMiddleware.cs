@@ -1,8 +1,5 @@
-﻿using System.Security.Claims;
-using BuildingBlocks.API.Extensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Modules.Identity.Data;
 using Shared;

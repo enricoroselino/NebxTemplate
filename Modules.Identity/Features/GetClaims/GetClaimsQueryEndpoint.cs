@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using BuildingBlocks.API.Configurations.Endpoint;
-using BuildingBlocks.API.Extensions;
+﻿using BuildingBlocks.API.Configurations.Endpoint;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

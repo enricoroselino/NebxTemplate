@@ -1,8 +1,5 @@
-﻿using BuildingBlocks.API.Models.CQRS;
-using Modules.Identity.Data.Repository;
+﻿using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Services;
-using Shared.Models.Responses;
-using Shared.Verdict;
 
 namespace Modules.Identity.Features.RefreshToken;
 

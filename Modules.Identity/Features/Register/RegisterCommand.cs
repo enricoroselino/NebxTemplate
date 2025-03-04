@@ -1,7 +1,4 @@
-﻿using BuildingBlocks.API.Models.CQRS;
-using Shared.Verdict;
-
-namespace Modules.Identity.Features.Register;
+﻿namespace Modules.Identity.Features.Register;
 
 public record RegisterCommand(
     string Username,

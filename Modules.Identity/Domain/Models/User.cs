@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using BuildingBlocks.API.Models.DDD;
-using Microsoft.AspNetCore.Identity;
 using Shared.Models.Exceptions;
 
 #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).

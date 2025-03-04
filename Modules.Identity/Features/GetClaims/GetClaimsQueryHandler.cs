@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.API.Models.CQRS;
-using Modules.Identity.Domain.Services;
-using Shared.Models.Responses;
+﻿using Modules.Identity.Domain.Services;
 using Shared.Models.ValueObjects;
 
 namespace Modules.Identity.Features.GetClaims;

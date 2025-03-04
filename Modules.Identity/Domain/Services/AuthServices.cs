@@ -1,10 +1,7 @@
-﻿using System.Security.Claims;
-using BuildingBlocks.API.Services.JwtManager;
-using Microsoft.AspNetCore.Identity;
+﻿using BuildingBlocks.API.Services.JwtManager;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Models;
-using Shared.Verdict;
 
 namespace Modules.Identity.Domain.Services;
 

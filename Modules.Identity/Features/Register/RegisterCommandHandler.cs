@@ -1,10 +1,5 @@
-using BuildingBlocks.API.Extensions;
-using BuildingBlocks.API.Models.CQRS;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Modules.Identity.Data;
 using Modules.Identity.Domain.Models;
-using Shared.Verdict;
 
 namespace Modules.Identity.Features.Register;
 

@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.API.Services;
-using Microsoft.AspNetCore.Identity;
 using Modules.Identity.Domain.Models;
 
 namespace Modules.Identity.Infrastructure;

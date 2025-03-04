@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.API.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Modules.Identity.Domain.Models;
 

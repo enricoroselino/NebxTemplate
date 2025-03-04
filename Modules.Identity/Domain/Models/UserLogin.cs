@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Shared.Models.Interfaces;
+﻿using Shared.Models.Interfaces;
 
 namespace Modules.Identity.Domain.Models;
 

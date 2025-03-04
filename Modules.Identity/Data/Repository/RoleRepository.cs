@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
-using Modules.Identity.Domain.Models;
+﻿using Modules.Identity.Domain.Models;
 
 namespace Modules.Identity.Data.Repository;
 

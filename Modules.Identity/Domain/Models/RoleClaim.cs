@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Shared.Models.Interfaces;
+﻿using Shared.Models.Interfaces;
 #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
 
 namespace Modules.Identity.Domain.Models;

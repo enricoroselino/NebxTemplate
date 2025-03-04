@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.API.Configurations.Endpoint;
-using BuildingBlocks.API.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
