@@ -36,6 +36,6 @@ public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, V
 
         var responseDto = new RefreshTokenResponse(refreshResult.Value.AccessToken, refreshResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
-        return response;
+        return Verdict.Success(response);
     }
 }
