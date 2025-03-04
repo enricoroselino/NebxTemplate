@@ -6,8 +6,8 @@ public class ImpersonateRevertCommandValidator : AbstractValidator<ImpersonateRe
 {
     public ImpersonateRevertCommandValidator()
     {
-        RuleFor(x => x.ImpersonatorUserId).NotEmpty();
-        RuleFor(x => x.TargetUserId).NotEmpty();
-        RuleFor(x => x.TargetTokenId).NotEmpty();
+        RuleFor(x => x.ImpersonatorUserId).NotEqual(Guid.Empty);
+        RuleFor(x => x.TargetUserId).NotEqual(Guid.Empty);
+        RuleFor(x => x.TargetTokenId).NotEqual(Guid.Empty);
     }
 }
