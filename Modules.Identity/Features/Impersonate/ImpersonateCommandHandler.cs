@@ -11,23 +11,20 @@ namespace Modules.Identity.Features.Impersonate;
 
 public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Verdict<Response<ImpersonateResponse>>>
 {
-    private readonly AppIdentityDbContext _dbContext;
     private readonly IUserRepository _userRepository;
     private readonly IJwtManager _jwtManager;
 
     public ImpersonateCommandHandler(
-        AppIdentityDbContext dbContext, 
         IUserRepository userRepository, 
         IJwtManager jwtManager)
     {
-        _dbContext = dbContext;
         _userRepository = userRepository;
         _jwtManager = jwtManager;
     }
 
     public async Task<Verdict<Response<ImpersonateResponse>>> Handle(ImpersonateCommand request, CancellationToken cancellationToken)
     {
-        var targetUser = await _dbContext.Users.FindAsync([request.UserId], cancellationToken);
+        var targetUser = await _userRepository.GetUser(userId: request.UserId, tracking: false, ct: cancellationToken);
         if (targetUser is null) return Verdict.NotFound("User not found");
 
         var claims = _userRepository.GetInformationClaims(targetUser);

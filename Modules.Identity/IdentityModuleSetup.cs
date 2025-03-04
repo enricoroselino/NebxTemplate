@@ -39,7 +39,8 @@ public static class IdentityModuleSetup
                 options.Password.RequireDigit = true;
 
                 options.Lockout.AllowedForNewUsers = false;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;

@@ -37,12 +37,8 @@ public class LoginCommandHandler : ICommandHandler<LoginCommand, Verdict<Respons
         CancellationToken cancellationToken)
     {
         var loginDate = _time.GetUtcNow().DateTime;
-        
-        var user = await _dbContext.Users
-            .Where(x => x.UserName == request.Identifier || x.Email == request.Identifier)
-            .Where(x => x.IsActive)
-            .SingleOrDefaultAsync(cancellationToken);
 
+        var user = await _userRepository.GetUser(identifier: request.Identifier, tracking: true, ct: cancellationToken);
         if (user is null) return Verdict.Unauthorized("Username or password is incorrect");
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);

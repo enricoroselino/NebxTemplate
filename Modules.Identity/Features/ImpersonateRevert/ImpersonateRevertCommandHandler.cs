@@ -10,16 +10,13 @@ namespace Modules.Identity.Features.ImpersonateRevert;
 public class ImpersonateRevertCommandHandler
     : ICommandHandler<ImpersonateRevertCommand, Verdict<Response<ImpersonateRevertResponse>>>
 {
-    private readonly AppIdentityDbContext _dbContext;
     private readonly IUserRepository _userRepository;
     private readonly IJwtManager _jwtManager;
 
     public ImpersonateRevertCommandHandler(
-        AppIdentityDbContext dbContext,
         IUserRepository userRepository,
         IJwtManager jwtManager)
     {
-        _dbContext = dbContext;
         _userRepository = userRepository;
         _jwtManager = jwtManager;
     }
@@ -27,8 +24,7 @@ public class ImpersonateRevertCommandHandler
     public async Task<Verdict<Response<ImpersonateRevertResponse>>> Handle(ImpersonateRevertCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users
-            .FindAsync([request.ImpersonatorId], cancellationToken);
+        var user = await _userRepository.GetUser(userId: request.ImpersonatorId, tracking: false, ct: cancellationToken);
         if (user is null) return Verdict.NotFound("User not found");
 
         var claims = _userRepository.GetInformationClaims(user);
