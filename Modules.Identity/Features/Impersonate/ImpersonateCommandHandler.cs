@@ -46,7 +46,7 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
             request.ImpersonatorTokenId,
             cancellationToken);
 
-        if (!revokeResult.IsSuccess) return revokeResult;
+        if (!revokeResult.IsSuccess) return Verdict.InternalError(revokeResult.ErrorMessage);
 
         // track impersonated token
         var issueResult = await _tokenServices.IssueToken(targetUser, claims, cancellationToken);
