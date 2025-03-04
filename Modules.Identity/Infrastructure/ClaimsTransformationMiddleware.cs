@@ -32,17 +32,13 @@ public class ClaimsTransformationMiddleware
         if (userId is null) throw new UnauthorizedAccessException();
 
         logger.LogDebug("[{Prefix}] Starting claims transformation for UserId: {UserId};", Prefix, userId);
-
+        
         var claims = await claimServices.GetClaims(userId.Value);
-        if (claims.Count == 0)
-        {
-            await _next(context);
-            return;
-        }
+        var retainClaims = context.User.Claims
+            .Where(x => !claims.Select(y => y.Type).Contains(x.Type));
 
-        var newIdentity = new ClaimsIdentity(context.User.Claims, JwtBearerDefaults.AuthenticationScheme);
-        newIdentity.AddClaims(claims);
-
+        var loadedClaims = retainClaims.Concat(claims);
+        var newIdentity = new ClaimsIdentity(loadedClaims, JwtBearerDefaults.AuthenticationScheme);
         context.User = new ClaimsPrincipal(newIdentity);
 
         logger.LogDebug("[{Prefix}] Loaded {ClaimsCount} claims for UserId: {UserId};", Prefix, claims.Count, userId);
