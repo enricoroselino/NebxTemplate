@@ -66,6 +66,7 @@ public static class IdentityModuleSetup
 
         services.AddScoped<IClaimServices, ClaimServices>();
         services.AddScoped<ILoginServices, LoginServices>();
+        services.AddScoped<ITokenServices, TokenServices>();
     }
 
     public static void UseIdentityModuleMiddlewares(this IApplicationBuilder app)
