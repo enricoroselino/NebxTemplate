@@ -1,31 +1,33 @@
 ﻿using BuildingBlocks.API.Configurations.Endpoint;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Modules.Identity.Constants;
 
-namespace Modules.Identity.Features.Login;
+namespace Modules.Identity.Features.Authentication.Register;
 
-public class LoginEndpoint : IEndpoint
+public class RegisterEndpoint : IEndpoint
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup(ApiMeta.Authentication.Route);
-
-        group.MapPost("login", async (
+        
+        group.MapPost("register", async (
                 ISender mediator,
                 HttpContext httpContext,
                 CancellationToken ct,
-                [FromBody] LoginRequest dto) =>
+                [FromBody] RegisterRequest dto) =>
             {
-                var command = new LoginCommand(dto.Identifier, dto.Password);
+                var command = new RegisterCommand(
+                    dto.Username,
+                    dto.Password,
+                    dto.PasswordConfirmation,
+                    dto.Email,
+                    dto.FullName);
+
                 var result = await mediator.Send(command, ct);
                 return result.ToResult(httpContext);
             })
-            .WithName(nameof(LoginEndpoint))
-            .WithSummary("Login to get JWT")
+            .WithName(nameof(RegisterEndpoint))
+            .WithSummary("Register a new user")
             .WithTags(ApiMeta.Authentication.Tag);
     }
 }

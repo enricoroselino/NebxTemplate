@@ -1,7 +1,7 @@
 using Modules.Identity.Data;
 using Modules.Identity.Domain.Models;
 
-namespace Modules.Identity.Features.Register;
+namespace Modules.Identity.Features.Authentication.Register;
 
 public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Verdict>
 {

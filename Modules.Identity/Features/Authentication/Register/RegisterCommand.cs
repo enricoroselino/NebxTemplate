@@ -1,4 +1,4 @@
-﻿namespace Modules.Identity.Features.Register;
+﻿namespace Modules.Identity.Features.Authentication.Register;
 
 public record RegisterCommand(
     string Username,

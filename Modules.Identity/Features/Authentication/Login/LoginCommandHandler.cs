@@ -1,6 +1,6 @@
 using Modules.Identity.Domain.Services;
 
-namespace Modules.Identity.Features.Login;
+namespace Modules.Identity.Features.Authentication.Login;
 
 public class LoginCommandHandler : ICommandHandler<LoginCommand, Verdict<Response<LoginResponse>>>
 {

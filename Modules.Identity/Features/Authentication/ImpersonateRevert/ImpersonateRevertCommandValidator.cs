@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Modules.Identity.Features.ImpersonateRevert;
+namespace Modules.Identity.Features.Authentication.ImpersonateRevert;
 
 public class ImpersonateRevertCommandValidator : AbstractValidator<ImpersonateRevertCommand>
 {

@@ -2,7 +2,6 @@
 using BuildingBlocks.API.Configurations;
 using BuildingBlocks.API.Services;
 using BuildingBlocks.API.Services.JwtManager;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;

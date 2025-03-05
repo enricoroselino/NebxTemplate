@@ -1,13 +1,9 @@
 ﻿using BuildingBlocks.API.Configurations.Endpoint;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Modules.Identity.Constants;
 using Shared.Models.Exceptions;
 
-namespace Modules.Identity.Features.Impersonate;
+namespace Modules.Identity.Features.Authentication.Impersonate;
 
 // TODO : make sure only admin can access
 

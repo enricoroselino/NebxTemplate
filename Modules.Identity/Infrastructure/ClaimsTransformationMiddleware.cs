@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.API.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Modules.Identity.Domain.Services;
 

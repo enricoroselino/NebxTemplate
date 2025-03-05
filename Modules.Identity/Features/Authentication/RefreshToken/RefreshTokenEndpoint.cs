@@ -1,12 +1,8 @@
 ﻿using BuildingBlocks.API.Configurations.Endpoint;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Modules.Identity.Constants;
 
-namespace Modules.Identity.Features.RefreshToken;
+namespace Modules.Identity.Features.Authentication.RefreshToken;
 
 public class RefreshTokenEndpoint : IEndpoint
 {

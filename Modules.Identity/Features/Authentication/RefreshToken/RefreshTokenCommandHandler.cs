@@ -1,7 +1,7 @@
 ﻿using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Services;
 
-namespace Modules.Identity.Features.RefreshToken;
+namespace Modules.Identity.Features.Authentication.RefreshToken;
 
 public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Verdict<Response<RefreshTokenResponse>>>
 {

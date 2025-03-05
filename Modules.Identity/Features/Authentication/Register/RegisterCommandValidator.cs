@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using Modules.Identity.Constants;
 
-namespace Modules.Identity.Features.Register;
+namespace Modules.Identity.Features.Authentication.Register;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

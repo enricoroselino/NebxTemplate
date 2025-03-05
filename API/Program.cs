@@ -17,7 +17,6 @@ builder.Services.AddLoggerSetup();
 builder.Services.AddJwtAuthenticationSetup();
 
 builder.Services.AddModuleSetup(typeof(Program).Assembly);
-
 builder.Services.AddIdentityModule();
 
 builder.WebHost.ConfigureKestrel(options =>

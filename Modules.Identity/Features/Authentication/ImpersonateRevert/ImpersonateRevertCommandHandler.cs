@@ -1,17 +1,17 @@
-﻿using Modules.Identity.Data;
+using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Services;
-using Shared;
 
-namespace Modules.Identity.Features.Impersonate;
+namespace Modules.Identity.Features.Authentication.ImpersonateRevert;
 
-public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Verdict<Response<ImpersonateResponse>>>
+public class ImpersonateRevertCommandHandler
+    : ICommandHandler<ImpersonateRevertCommand, Verdict<Response<ImpersonateRevertResponse>>>
 {
     private readonly IUserRepository _userRepository;
     private readonly ITokenServices _tokenServices;
     private readonly AppIdentityDbContext _dbContext;
 
-    public ImpersonateCommandHandler(
+    public ImpersonateRevertCommandHandler(
         IUserRepository userRepository,
         ITokenServices tokenServices,
         AppIdentityDbContext dbContext)
@@ -21,18 +21,11 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
         _dbContext = dbContext;
     }
 
-    public async Task<Verdict<Response<ImpersonateResponse>>> Handle(
-        ImpersonateCommand request,
+    public async Task<Verdict<Response<ImpersonateRevertResponse>>> Handle(
+        ImpersonateRevertCommand request,
         CancellationToken cancellationToken)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-
-        var targetUser = await _userRepository.GetUser(
-            userId: request.TargetUserId,
-            tracking: false,
-            ct: cancellationToken);
-
-        if (targetUser is null) return Verdict.NotFound("Target user not found");
 
         var impersonatorUser = await _userRepository.GetUser(
             userId: request.ImpersonatorUserId,
@@ -41,26 +34,29 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
 
         if (impersonatorUser is null) return Verdict.NotFound("Impersonator user not found");
 
-        var claims = _userRepository
-            .GetInformationClaims(targetUser)
-            .Concat([new Claim(CustomClaim.ImpersonatorUserId, impersonatorUser.Id.ToString())])
-            .ToList();
+        var targetUser = await _userRepository.GetUser(
+            userId: request.TargetUserId,
+            tracking: false,
+            ct: cancellationToken);
 
-        // revoke current user token
+        if (targetUser is null) return Verdict.NotFound("Target user not found");
+
+        // revoke impersonated target token
         var revokeResult = await _tokenServices.RevokeToken(
-            impersonatorUser,
-            request.ImpersonatorTokenId,
+            targetUser,
+            request.TargetTokenId,
             cancellationToken);
 
         if (!revokeResult.IsSuccess) return Verdict.InternalError(revokeResult.ErrorMessage);
 
-        // track impersonated token
-        var issueResult = await _tokenServices.IssueToken(targetUser, claims, cancellationToken);
+        // track reverted impersonator user token
+        var claims = _userRepository.GetInformationClaims(impersonatorUser);
+        var issueResult = await _tokenServices.IssueToken(impersonatorUser, claims, cancellationToken);
         if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);
 
         await transaction.CommitAsync(cancellationToken);
 
-        var responseDto = new ImpersonateResponse(issueResult.Value.AccessToken, issueResult.Value.RefreshToken);
+        var responseDto = new ImpersonateRevertResponse(issueResult.Value.AccessToken, issueResult.Value.RefreshToken);
         var response = Response.Build(responseDto);
         return Verdict.Success(response);
     }

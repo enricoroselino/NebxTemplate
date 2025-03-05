@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Modules.Identity.Features.RefreshToken;
+namespace Modules.Identity.Features.Authentication.RefreshToken;
 
 public class RefreshTokenEndpointValidator : AbstractValidator<RefreshTokenCommand>
 {

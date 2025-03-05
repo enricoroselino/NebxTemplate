@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Modules.Identity.Data;
 using Shared;
