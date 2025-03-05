@@ -26,7 +26,16 @@ public class Role : IdentityRole<Guid>, IEntity<Guid>
                 exceptionCreator: () => new DomainException("Name can't be empty.")),
             NormalizedName = name.ToUpperInvariant(),
             Description = Guard.Against.NullOrWhiteSpace(description,
-                exceptionCreator: () => new DomainException("Please give meaningful description.")),
+                exceptionCreator: () => new DomainException("Please give a meaningful description.")),
         };
+    }
+
+    public void Update(string name, string description)
+    {
+        Name = Guard.Against.NullOrWhiteSpace(name,
+            exceptionCreator: () => new DomainException("Name can't be empty."));
+        NormalizedName = name.ToUpperInvariant();
+        Description = Guard.Against.NullOrWhiteSpace(description,
+            exceptionCreator: () => new DomainException("Please give a meaningful description."));
     }
 }
