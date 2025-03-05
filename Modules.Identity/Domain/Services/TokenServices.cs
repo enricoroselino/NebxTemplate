@@ -6,7 +6,7 @@ namespace Modules.Identity.Domain.Services;
 
 public interface ITokenServices
 {
-    public Task<Verdict> RevokeToken(Guid userId, Guid tokenId, CancellationToken ct = default);
+    public Task<Verdict> RevokeToken(User user, Guid tokenId, CancellationToken ct = default);
     public Task<Verdict<TokenResultPair>> IssueToken(User user, List<Claim> claims, CancellationToken ct = default);
 
     public Task<Verdict<TokenResultPair>> RefreshToken(
@@ -29,12 +29,12 @@ public class TokenServices : ITokenServices
     }
 
     public async Task<Verdict> RevokeToken(
-        Guid userId,
+        User user,
         Guid tokenId,
         CancellationToken ct = default)
     {
         var tokenData = await _dbContext.JwtStores
-            .SingleOrDefaultAsync(x => x.UserId == userId && x.TokenId == tokenId, ct);
+            .SingleOrDefaultAsync(x => x.UserId == user.Id && x.TokenId == tokenId, ct);
         if (tokenData is null) return Verdict.InternalError("Token data not found");
 
         tokenData.Revoke();
@@ -51,6 +51,11 @@ public class TokenServices : ITokenServices
         var refreshToken = _jwtManager.CreateRefreshToken();
 
         var tokenData = JwtStore.Create(user.Id, accessToken.Id, refreshToken.Value, refreshToken.ExpiresOn);
+
+        var existing = await _dbContext.JwtStores
+            .AnyAsync(x => x.UserId == tokenData.UserId && x.TokenId == tokenData.Id, ct);
+        if (existing) return Verdict.InternalError("Token already exists");
+        
         await _dbContext.JwtStores.AddAsync(tokenData, ct);
         await _dbContext.SaveChangesAsync(ct);
 

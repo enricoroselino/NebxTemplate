@@ -32,17 +32,24 @@ public class ImpersonateRevertCommandHandler
             tracking: false,
             ct: cancellationToken);
 
-        if (impersonatorUser is null) return Verdict.NotFound("User not found");
+        if (impersonatorUser is null) return Verdict.NotFound("Impersonator user not found");
 
-        // revoke impersonated token
+        var targetUser = await _userRepository.GetUser(
+            userId: request.TargetUserId,
+            tracking: false,
+            ct: cancellationToken);
+
+        if (targetUser is null) return Verdict.NotFound("Target user not found");
+
+        // revoke impersonated target token
         var revokeResult = await _tokenServices.RevokeToken(
-            request.TargetUserId,
+            targetUser,
             request.TargetTokenId,
             cancellationToken);
 
         if (!revokeResult.IsSuccess) return Verdict.InternalError(revokeResult.ErrorMessage);
 
-        // track reverted user token
+        // track reverted impersonator user token
         var claims = _userRepository.GetInformationClaims(impersonatorUser);
         var issueResult = await _tokenServices.IssueToken(impersonatorUser, claims, cancellationToken);
         if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);

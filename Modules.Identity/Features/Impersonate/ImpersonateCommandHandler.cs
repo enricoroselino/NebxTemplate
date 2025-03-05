@@ -12,8 +12,8 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
     private readonly AppIdentityDbContext _dbContext;
 
     public ImpersonateCommandHandler(
-        IUserRepository userRepository, 
-        ITokenServices tokenServices, 
+        IUserRepository userRepository,
+        ITokenServices tokenServices,
         AppIdentityDbContext dbContext)
     {
         _userRepository = userRepository;
@@ -26,18 +26,29 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
         CancellationToken cancellationToken)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-        
-        var targetUser = await _userRepository.GetUser(userId: request.TargetUserId, tracking: false, ct: cancellationToken);
-        if (targetUser is null) return Verdict.NotFound("User not found");
-        
+
+        var targetUser = await _userRepository.GetUser(
+            userId: request.TargetUserId,
+            tracking: false,
+            ct: cancellationToken);
+
+        if (targetUser is null) return Verdict.NotFound("Target user not found");
+
+        var impersonatorUser = await _userRepository.GetUser(
+            userId: request.ImpersonatorUserId,
+            tracking: false,
+            ct: cancellationToken);
+
+        if (impersonatorUser is null) return Verdict.NotFound("Impersonator user not found");
+
         var claims = _userRepository
             .GetInformationClaims(targetUser)
-            .Concat([new Claim(CustomClaim.ImpersonatorUserId, request.ImpersonatorUserId.ToString())])
+            .Concat([new Claim(CustomClaim.ImpersonatorUserId, impersonatorUser.Id.ToString())])
             .ToList();
 
         // revoke current user token
         var revokeResult = await _tokenServices.RevokeToken(
-            request.ImpersonatorUserId,
+            impersonatorUser,
             request.ImpersonatorTokenId,
             cancellationToken);
 
@@ -46,7 +57,7 @@ public class ImpersonateCommandHandler : ICommandHandler<ImpersonateCommand, Ver
         // track impersonated token
         var issueResult = await _tokenServices.IssueToken(targetUser, claims, cancellationToken);
         if (!issueResult.IsSuccess) return Verdict.InternalError(issueResult.ErrorMessage);
-        
+
         await transaction.CommitAsync(cancellationToken);
 
         var responseDto = new ImpersonateResponse(issueResult.Value.AccessToken, issueResult.Value.RefreshToken);
