@@ -3,6 +3,7 @@
 global using System.Security.Claims;
 global using BuildingBlocks.API.Extensions;
 global using BuildingBlocks.API.Models.CQRS;
+global using FluentValidation;
 global using MediatR;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Http;

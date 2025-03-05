@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using FluentValidation;
 using Modules.Identity.Constants;
 
 namespace Modules.Identity.Application.Features.Authentication.ChangePassword;

@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace Modules.Identity.Application.Features.Authentication.ImpersonateRevert;
 
 public class ImpersonateRevertCommandValidator : AbstractValidator<ImpersonateRevertCommand>

@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Modules.Identity.Application.Features.Authentication.Impersonate;
+﻿namespace Modules.Identity.Application.Features.Authentication.Impersonate;
 
 public class ImpersonateCommandValidator : AbstractValidator<ImpersonateCommand>
 {

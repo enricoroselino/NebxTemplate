@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Modules.Identity.Application.Features.AccessManagement.Users.DeleteUsers;
+﻿namespace Modules.Identity.Application.Features.AccessManagement.Users.DeleteUsers;
 
 public class DeleteUserCommandValidator : AbstractValidator<DeleteUsersCommand>
 {
