@@ -22,6 +22,7 @@ public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, Response<GetUse
         var paginationSpec = new PaginationSpecification<User>(request.Pagination);
 
         var query = _dbContext.Users
+            .AsNoTracking()
             .WithSpecification(userSpec)
             .OrderBy(x => x.CreatedOn);
 
