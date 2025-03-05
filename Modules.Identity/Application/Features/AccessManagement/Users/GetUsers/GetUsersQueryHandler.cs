@@ -23,8 +23,8 @@ public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, Response<GetUse
 
         var query = _dbContext.Users
             .AsNoTracking()
-            .WithSpecification(userSpec)
-            .OrderBy(x => x.CreatedOn);
+            .OrderBy(x => x.CreatedOn)
+            .WithSpecification(userSpec);
 
         var users = await query
             .WithSpecification(paginationSpec)
