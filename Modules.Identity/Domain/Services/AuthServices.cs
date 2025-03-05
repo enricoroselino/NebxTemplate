@@ -9,7 +9,7 @@ namespace Modules.Identity.Domain.Services;
 public interface IAuthServices
 {
     public Task<Verdict<TokenResultPair>> Login(
-        string identifier,
+        User user,
         string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default);
@@ -37,15 +37,12 @@ public class AuthServices : IAuthServices
     }
 
     public async Task<Verdict<TokenResultPair>> Login(
-        string identifier,
+        User user,
         string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
-
-        var user = await _userRepository.GetUser(identifier: identifier, tracking: true, ct: ct);
-        if (user is null) return Verdict.Unauthorized("Username or password is incorrect");
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         if (!result.Succeeded) return Verdict.Unauthorized("Username or password is incorrect");
