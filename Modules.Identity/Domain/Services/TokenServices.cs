@@ -7,13 +7,14 @@ namespace Modules.Identity.Domain.Services;
 public interface ITokenServices
 {
     public Task<Verdict> RevokeToken(User user, Guid tokenId, CancellationToken ct = default);
+    public Task<Verdict> RevokeTokenByUser(User user, CancellationToken ct = default);
     public Task<Verdict<TokenResultPair>> IssueToken(User user, List<Claim> claims, CancellationToken ct = default);
 
     public Task<Verdict<TokenResultPair>> RefreshToken(
         User user,
         Guid tokenId,
         string refreshToken,
-        List<Claim> claims, 
+        List<Claim> claims,
         CancellationToken ct = default);
 }
 
@@ -42,6 +43,18 @@ public class TokenServices : ITokenServices
         return Verdict.Success();
     }
 
+    public async Task<Verdict> RevokeTokenByUser(User user, CancellationToken ct = default)
+    {
+        var tokenData = await _dbContext.JwtStores
+            .Where(x => x.UserId == user.Id)
+            .Where(x => x.RevokedOn == null && x.ExpiresOn > DateTime.UtcNow)
+            .ToListAsync(ct);
+
+        tokenData.ForEach(x => x.Revoke());
+        await _dbContext.SaveChangesAsync(ct);
+        return Verdict.Success();
+    }
+
     public async Task<Verdict<TokenResultPair>> IssueToken(
         User user,
         List<Claim> claims,
@@ -55,7 +68,7 @@ public class TokenServices : ITokenServices
         var existing = await _dbContext.JwtStores
             .AnyAsync(x => x.UserId == tokenData.UserId && x.TokenId == tokenData.Id, ct);
         if (existing) return Verdict.InternalError("Token already exists");
-        
+
         await _dbContext.JwtStores.AddAsync(tokenData, ct);
         await _dbContext.SaveChangesAsync(ct);
 
@@ -80,10 +93,10 @@ public class TokenServices : ITokenServices
 
         var newAccessToken = _jwtManager.CreateAccessToken(claims);
         var newRefreshToken = _jwtManager.CreateRefreshToken();
-        
+
         tokenData.Update(newAccessToken.Id, newRefreshToken.Value, newRefreshToken.ExpiresOn);
         await _dbContext.SaveChangesAsync(ct);
-        
+
         var tokenPairDto = new TokenResultPair(newAccessToken, newRefreshToken);
         return Verdict.Success(tokenPairDto);
     }
