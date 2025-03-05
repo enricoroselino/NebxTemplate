@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Modules.Identity.Constants;
+using Modules.Identity.Contract;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Models;
@@ -57,6 +58,8 @@ public static class IdentityModuleSetup
             .AddUserManager<UserManager<User>>()
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders();
+
+        services.AddScoped<IIdentityContract, IIdentityContract>();
 
         services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();

@@ -13,6 +13,8 @@ public static class DefaultSetup
     {
         services.AddScalarSetup();
         services.AddSwaggerSetup();
+        services.AddIdempotentSetup();
+        
         services.AddJsonSetup();
         services.AddRateLimiterSetup();
 
@@ -20,7 +22,6 @@ public static class DefaultSetup
         services.AddAntiforgery();
 
         services.AddSingleton<TimeProvider>(_ => TimeProvider.System);
-
         services.AddExceptionHandler<GlobalExceptionHandler>();
     }
 
