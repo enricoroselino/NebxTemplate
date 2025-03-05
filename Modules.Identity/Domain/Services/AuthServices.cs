@@ -2,6 +2,7 @@
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Models;
+using Shared.Models.Exceptions;
 
 namespace Modules.Identity.Domain.Services;
 
@@ -12,6 +13,8 @@ public interface IAuthServices
         string password,
         List<Claim>? addOnClaims = null,
         CancellationToken ct = default);
+
+    public Task<Verdict> Logout(User user, Guid tokenId, CancellationToken ct = default);
 }
 
 public class AuthServices : IAuthServices
@@ -61,5 +64,17 @@ public class AuthServices : IAuthServices
 
         var resultDto = issueResult.Value;
         return Verdict.Success(resultDto);
+    }
+
+    public async Task<Verdict> Logout(User user, Guid tokenId, CancellationToken ct = default)
+    {
+        var tokenData = await _dbContext.JwtStores
+            .SingleOrDefaultAsync(x => x.UserId == user.Id && x.TokenId == tokenId, ct);
+
+        if (tokenData is null) throw new UnauthorizedException();
+
+        tokenData.Revoke();
+        await _dbContext.SaveChangesAsync(ct);
+        return Verdict.Success();
     }
 }
