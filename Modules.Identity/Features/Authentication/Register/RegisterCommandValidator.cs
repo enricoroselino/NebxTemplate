@@ -14,11 +14,15 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         
         RuleFor(x => x.Username)
             .NotEmpty()
+            .MinimumLength(ValidationConstant.MinUsernameLength)
+            .MaximumLength(ValidationConstant.MaxUsernameLength)
             .Matches(usernameRe.Pattern, RegexOptions.Compiled)
             .WithMessage(usernameRe.Message);
         
         RuleFor(x => x.Password)
             .NotEmpty()
+            .MinimumLength(ValidationConstant.MinPasswordLength)
+            .MaximumLength(ValidationConstant.MaxPasswordLength)
             .Matches(passwordRe.Pattern, RegexOptions.Compiled)
             .WithMessage(passwordRe.Message);
         
@@ -33,6 +37,7 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         
         RuleFor(x => x.Fullname)
             .NotEmpty()
+            .MaximumLength(ValidationConstant.MaxNameLength)
             .Matches(fullnameRe.Pattern, RegexOptions.Compiled)
             .WithMessage(fullnameRe.Message);
     }
