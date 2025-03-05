@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Modules.Identity.Constants;
 using Modules.Identity.Data;
 using Modules.Identity.Data.Repository;
 using Modules.Identity.Domain.Models;
@@ -28,7 +29,7 @@ public static class IdentityModuleSetup
 
         services.AddIdentityCore<User>(options =>
             {
-                options.Password.RequiredLength = 8;
+                options.Password.RequiredLength = ValidationConstant.MinPasswordLength;
 
                 // managed via fluent validation
                 options.Password.RequiredUniqueChars = 0;
