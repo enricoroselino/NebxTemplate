@@ -16,7 +16,7 @@ public class JwtStore : Entity<Guid>
     public DateTime ExpiresOn { get; private set; }
     public DateTime? RevokedOn { get; private set; }
 
-    public virtual User User { get; set; }
+    public virtual User User { get; init; } = null!;
 
     public static JwtStore Create(Guid userId, Guid tokenId, string refreshToken, long expiresOn)
     {
@@ -35,9 +35,7 @@ public class JwtStore : Entity<Guid>
     }
 
     public void Revoke() => RevokedOn = DateTime.UtcNow;
-
-    public void UnRevoke() => RevokedOn = null;
-
+    
     public void Update(Guid tokenId, string refreshToken, long expiresOn)
     {
         var expire = DateTime.UtcNow.AddSeconds(expiresOn);
