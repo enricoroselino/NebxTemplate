@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.API.Configurations.Endpoint;
-using Microsoft.AspNetCore.Mvc;
 using Modules.Identity.Constants;
 
 namespace Modules.Identity.Application.Features.Authentication.ChangePassword;
