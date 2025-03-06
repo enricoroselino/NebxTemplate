@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\BuildingBlocks.API\BuildingBlocks.API.csproj" />
       <ProjectReference Include="..\Modules.Identity.Contract\Modules.Identity.Contract.csproj" />
+      <ProjectReference Include="..\Modules.SharedKernel\Modules.SharedKernel.csproj" />
     </ItemGroup>
 
     <ItemGroup>

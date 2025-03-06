@@ -1,0 +1,3 @@
+﻿namespace Modules.Identity.Contract.Dtos;
+
+public record UserMigrateDto(string Username, string Password, string Email, string FullNme, int CompatId);
