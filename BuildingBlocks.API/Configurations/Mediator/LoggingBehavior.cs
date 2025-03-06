@@ -21,7 +21,7 @@ internal sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<T
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation("[{Prefix}] Handling request: {RequestType};", Prefix, typeof(TRequest).Name);
+        _logger.LogDebug("[{Prefix}] Handling request: {RequestType};", Prefix, typeof(TRequest).Name);
 
         var startTime = _timeProvider.GetTimestamp();
         var response = await next();
@@ -35,7 +35,7 @@ internal sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<T
                 Prefix, typeof(TRequest).Name, elapsedTime);
         }
 
-        _logger.LogInformation("[{Prefix}] Handled request: {Request}; Response Data: {Response};",
+        _logger.LogDebug("[{Prefix}] Handled request: {Request}; Response Data: {Response};",
             Prefix, typeof(TRequest).Name, typeof(TResponse).Name);
 
         return response;

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using BuildingBlocks.API.Extensions;
-using BuildingBlocks.Contract.Infrastructure.JwtManager;
+using BuildingBlocks.API.Services.JwtManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
