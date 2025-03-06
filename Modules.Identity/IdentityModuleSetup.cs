@@ -37,8 +37,8 @@ public static class IdentityModuleSetup
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
 
                 options.Lockout.AllowedForNewUsers = false;
                 options.Lockout.MaxFailedAccessAttempts = 5;
