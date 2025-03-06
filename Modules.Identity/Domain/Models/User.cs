@@ -31,19 +31,38 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
         return new User()
         {
             Id = Guid.NewGuid(),
+            CompatId = compatId,
             UserName = Guard.Against.NullOrWhiteSpace(username,
                 exceptionCreator: () => new DomainException("Username can't be empty.")),
+            NormalizedUserName = username.ToUpperInvariant(),
             Email = Guard.Against.NullOrWhiteSpace(email,
                 exceptionCreator: () => new DomainException("Email can't be empty.")),
             NormalizedEmail = email.ToUpperInvariant(),
-            NormalizedUserName = email.ToUpperInvariant(),
             FullName = Guard.Against.NullOrWhiteSpace(fullname,
                 exceptionCreator: () => new DomainException("Fullname can't be empty.")),
-            CompatId = compatId,
             IsActive = true,
         };
     }
 
     public void Login() => LastLogin = DateTime.UtcNow;
     public void Deactivate() => IsActive = false;
+
+    public static User Migrate(string username, string email, string fullname, int compatId)
+    {
+        return new User()
+        {
+            Id = Guid.NewGuid(),
+            CompatId = Guard.Against.NegativeOrZero(compatId, nameof(compatId),
+                exceptionCreator: () => new DomainException("CompatId is not valid.")),
+            UserName = Guard.Against.NullOrWhiteSpace(username,
+                exceptionCreator: () => new DomainException("Username can't be empty.")),
+            NormalizedUserName = username.ToUpperInvariant(),
+            Email = Guard.Against.NullOrWhiteSpace(email,
+                exceptionCreator: () => new DomainException("Email can't be empty.")),
+            NormalizedEmail = email.ToUpperInvariant(),
+            FullName = Guard.Against.NullOrWhiteSpace(fullname,
+                exceptionCreator: () => new DomainException("Fullname can't be empty.")),
+            IsActive = true,
+        };
+    }
 }
