@@ -9,7 +9,7 @@ public record Pagination
     public int PageSize { get; }
     public int Offset => (Page - 1) * PageSize;
 
-    private const int DefaultSize = 20;
+    public const int DefaultSize = 10;
     private readonly HashSet<int> _permittedPageSizes = [10, 20, 50, 100, 200, 500, 1000];
 
     public Pagination(int page, int pageSize = DefaultSize)

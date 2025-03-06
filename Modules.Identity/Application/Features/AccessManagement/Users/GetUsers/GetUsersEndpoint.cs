@@ -15,7 +15,7 @@ public class GetUsersEndpoint : IEndpoint
                 CancellationToken ct,
                 [FromQuery] string? searchTerm,
                 [FromQuery] int page = 1,
-                [FromQuery] int pageSize = 10) =>
+                [FromQuery] int pageSize = Pagination.DefaultSize) =>
             {
                 var pagination = new Pagination(page, pageSize);
 
