@@ -47,7 +47,7 @@ public class IdentityContract : IIdentityContract
 
     public async Task<Verdict<UserId>> MigrateUser(UserMigrateDto dto, CancellationToken ct = default)
     {
-        var newUser = User.Migrate(dto.Username, dto.Email, dto.FullNme, dto.CompatId);
+        var newUser = User.Migrate(dto.Username, dto.Email, dto.FullName, dto.CompatId);
 
         var existing = await _dbContext.Users
             .AsNoTracking()
