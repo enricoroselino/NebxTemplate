@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Modules.Identity.Application;
 using Modules.Identity.Constants;
 using Modules.Identity.Contract;
 using Modules.Identity.Data;
@@ -59,7 +60,7 @@ public static class IdentityModuleSetup
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders();
 
-        services.AddScoped<IIdentityContract, IIdentityContract>();
+        services.AddScoped<IIdentityContract, IdentityContract>();
 
         services.AddScoped<IHasher, BcryptHasher>();
         services.AddScoped<IPasswordHasher<User>, BcryptPasswordHasher>();

@@ -26,8 +26,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.LastLogin)
             .IsRequired(false);
 
-        builder.Property(x => x.IsActive)
-            .HasDefaultValue(true)
-            .IsRequired();
+        builder.Property(x => x.DeactivateOn)
+            .IsRequired(false);
     }
 }

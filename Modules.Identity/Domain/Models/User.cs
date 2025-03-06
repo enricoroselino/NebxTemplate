@@ -16,7 +16,7 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
     public override string PasswordHash { get; set; } = string.Empty;
     public int? CompatId { get; private set; }
     public DateTime? LastLogin { get; private set; }
-    public bool IsActive { get; private set; }
+    public DateTime? DeactivateOn { get; private set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
@@ -40,12 +40,12 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
             NormalizedEmail = email.ToUpperInvariant(),
             FullName = Guard.Against.NullOrWhiteSpace(fullname,
                 exceptionCreator: () => new DomainException("Fullname can't be empty.")),
-            IsActive = true,
+            DeactivateOn = null,
         };
     }
 
     public void Login() => LastLogin = DateTime.UtcNow;
-    public void Deactivate() => IsActive = false;
+    public void Deactivate() => DeactivateOn = DateTime.UtcNow;
 
     public static User Migrate(string username, string email, string fullname, int compatId)
     {
@@ -62,7 +62,7 @@ public class User : IdentityUser<Guid>, IEntity<Guid>
             NormalizedEmail = email.ToUpperInvariant(),
             FullName = Guard.Against.NullOrWhiteSpace(fullname,
                 exceptionCreator: () => new DomainException("Fullname can't be empty.")),
-            IsActive = true,
+            DeactivateOn = null,
         };
     }
 }

@@ -28,6 +28,6 @@ public sealed class GetUserSpecification : Specification<User>
                 u.NormalizedEmail == identifier.ToUpperInvariant());
         }
 
-        Query.Where(x => x.IsActive);
+        Query.Where(x => x.DeactivateOn == null);
     }
 }
