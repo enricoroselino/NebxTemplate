@@ -25,8 +25,10 @@ public class JwtStore : Entity<Guid>
         return new JwtStore()
         {
             Id = Guid.CreateVersion7(),
-            UserId = userId,
-            TokenId = tokenId,
+            UserId = Guard.Against.NullOrEmpty(userId, nameof(userId),
+                exceptionCreator: () => new DomainException("UserId cannot be null or empty.")),
+            TokenId = Guard.Against.NullOrEmpty(tokenId, nameof(tokenId),
+                exceptionCreator: () => new DomainException("TokenId cannot be null or empty.")),
             RefreshToken = Guard.Against.NullOrWhiteSpace(refreshToken, nameof(refreshToken),
                 exceptionCreator: () => new DomainException("Refresh token cannot be empty.")),
             ExpiresOn = Guard.Against.NullOrOutOfSQLDateRange(expire, nameof(expiresOn),
@@ -35,13 +37,15 @@ public class JwtStore : Entity<Guid>
     }
 
     public void Revoke() => RevokedOn = DateTime.UtcNow;
-    
+
     public void Update(Guid tokenId, string refreshToken, long expiresOn)
     {
         var expire = DateTime.UtcNow.AddSeconds(expiresOn);
 
-        TokenId = tokenId;
-        RefreshToken = refreshToken;
+        TokenId = Guard.Against.NullOrEmpty(tokenId, nameof(tokenId),
+            exceptionCreator: () => new DomainException("TokenId cannot be null or empty."));
+        RefreshToken = Guard.Against.NullOrWhiteSpace(refreshToken, nameof(refreshToken),
+            exceptionCreator: () => new DomainException("Refresh token cannot be null or empty."));
         ExpiresOn = Guard.Against.NullOrOutOfSQLDateRange(expire, nameof(expiresOn),
             exceptionCreator: () => new DomainException("Expires time is not valid."));
     }
